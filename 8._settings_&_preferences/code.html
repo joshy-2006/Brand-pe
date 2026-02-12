@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Brand-pe Settings</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700&amp;display=swap"
+        rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: 'false',
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#f27f0d",
+                        "background-light": "#f8f7f5",
+                        "background-dark": "#221910",
+                        "surface-dark": "#2d241b", // Slightly lighter than background-dark for cards
+                    },
+                    fontFamily: {
+                        "display": ["Manrope", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "2xl": "1rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+    <style>
+        /* Custom scrollbar hiding for clean mobile look */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+
+        /* Standardized Premium Switch */
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 44px;
+            height: 24px;
+        }
+
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(255, 255, 255, 0.1);
+            transition: .4s;
+            border-radius: 24px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 18px;
+            width: 18px;
+            left: 2px;
+            bottom: 2px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        input:checked+.slider {
+            background-color: #f27f0d;
+        }
+
+        input:checked+.slider:before {
+            transform: translateX(20px);
+        }
+    </style>
+    <style>
+        body {
+            min-height: max(884px, 100dvh);
+        }
+    </style>
+</head>
+
+<body class="bg-background-light text-slate-800 font-display min-h-screen flex justify-center">
+    <!-- Mobile Device Container -->
+    <div class="w-full max-w-md bg-background-light min-h-screen flex flex-col relative shadow-2xl overflow-hidden">
+        <!-- Status Bar Placeholder -->
+        <div class="h-12 w-full flex items-center justify-between px-6 pt-2 z-20">
+            <span class="text-sm font-semibold text-slate-900/80">9:41</span>
+            <div class="flex items-center gap-1.5">
+                <span class="material-icons-round text-sm text-slate-900/80">signal_cellular_alt</span>
+                <span class="material-icons-round text-sm text-slate-900/80">wifi</span>
+                <span class="material-icons-round text-sm text-slate-900/80">battery_full</span>
+            </div>
+        </div>
+        <!-- Header -->
+        <header
+            class="px-6 pb-6 pt-2 flex items-center justify-between sticky top-0 z-10 bg-background-light/90 backdrop-blur-md">
+            <div>
+                <h1 data-t="settings-title" class="text-2xl font-bold tracking-tight text-slate-900">
+                    Settings</h1>
+                <p id="current-plan-display" class="text-sm text-primary font-medium mt-0.5">Brand-pe Starter</p>
+            </div>
+            <div
+                class="h-10 w-10 rounded-full bg-white border border-slate-200 flex items-center justify-center overflow-hidden">
+                <img alt="User Profile" class="h-full w-full object-cover" data-alt="User avatar placeholder"
+                    src="https://lh3.googleusercontent.com/aida-public/AB6AXuB4da88Xhcr00qHPMODsLRolT8-wstDErm8PNqQL61PvAQcnlLdE8R_uQsSmvA0mTMsrpnXalyXiiqJ92cmatj3KEGLUOghBQDOHIxe_KezCEm2T1s5O5FOJj0SXMJ_cNnqtz2-AIrNwcCgdvIJrgOAXdvEs2Y-g2y3Phpy1X5nM9vuRwLQ7HN0imYgwWkR05x2Or7DM_OHpXodR7SuAOcVfQaVIYg3DX6m9jOC6oInZeH6gs-nLWW2We0A48Ldga7RYb5I56ec2eHy" />
+            </div>
+        </header>
+        <!-- Main Content (Scrollable) -->
+        <main class="flex-1 overflow-y-auto no-scrollbar px-5 pb-24 space-y-8">
+            <!-- Banner / Profile Card -->
+            <div
+                class="rounded-2xl p-5 bg-gradient-to-br from-primary/10 to-white border border-slate-200 relative overflow-hidden group shadow-sm">
+                <div class="absolute -right-10 -top-10 w-40 h-40 bg-primary/5 rounded-full blur-3xl"></div>
+                <div class="relative z-10 flex items-center gap-4">
+                    <div class="h-16 w-16 rounded-full p-0.5 border-2 border-primary/30">
+                        <img alt="Profile" class="w-full h-full rounded-full object-cover"
+                            data-alt="Close up portrait of a young woman with curly hair"
+                            src="https://lh3.googleusercontent.com/aida-public/AB6AXuDxrmRbBqfAawAdPAT7ymNRf5O4Q8MizM5oDNncsGZ13ymaRuKLi9sbbcLeaV3qjRgvKRIKcKO8zDey8zuM2YEoPv_FgEuOHpFa9MCTzDNQm54LTpMmMZC4cVj3lbaAShVvVuOIJaMKXpUJZPsjarEQksNtytFI9PekHa9KXJdUQ_X88F1sIt3d8v_GgA0NqLUG9DFFewrHChusm8_1HKppvcpVnEFYf4i3HwtowyJ5GbQB3Q3CMnSAhwGIVd9SRYNx-YnB6TONUOpM" />
+                    </div>
+                    <div>
+                        <h3 id="display-name" class="font-bold text-lg text-slate-900">Alex Morgan</h3>
+                        <p id="display-email" class="text-xs text-slate-500 mb-2">alex@brand-pe.com</p>
+                        <button data-t="edit-profile"
+                            class="text-xs font-semibold text-primary flex items-center gap-1 hover:underline">
+                            Edit Profile <span class="material-icons-round text-[14px]">arrow_forward</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <!-- Section 1: App Preferences -->
+            <div>
+                <h2 class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-3 ml-2">App Preferences</h2>
+                <div
+                    class="bg-white shadow-sm rounded-xl overflow-hidden divide-y divide-slate-100 border border-slate-200">
+                    <!-- Language Row (Requested Specific) -->
+                    <button id="lang-toggle-row"
+                        class="w-full px-4 py-4 flex items-center justify-between hover:bg-slate-50 transition-colors active:bg-slate-100 group">
+                        <div class="flex items-center gap-3">
+                            <div class="p-2 rounded-lg bg-blue-500/10 text-blue-500">
+                                <span class="material-icons-round text-xl">language</span>
+                            </div>
+                            <span data-t="lang-pref" class="text-sm font-medium text-slate-700">Language
+                                Preference</span>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <span id="current-lang-text"
+                                class="text-sm text-slate-400 group-hover:text-slate-600 transition-colors uppercase">English</span>
+                            <span class="material-icons-round text-slate-300 text-lg">sync</span>
+                        </div>
+                    </button>
+                </div>
+            </div>
+            <!-- Section 2: Notifications -->
+            <div>
+                <h2 class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-3 ml-2">Notifications</h2>
+                <div
+                    class="bg-white shadow-sm rounded-xl overflow-hidden divide-y divide-slate-100 border border-slate-200">
+                    <!-- Push Notifications -->
+                    <div class="px-4 py-3.5 flex items-center justify-between">
+                        <div class="flex items-center gap-3">
+                            <div class="p-2 rounded-lg bg-primary/10 text-primary">
+                                <span class="material-icons-round text-xl">notifications_active</span>
+                            </div>
+                            <div class="flex flex-col">
+                                <span class="text-sm font-medium text-slate-700">Push Notifications</span>
+                                <span class="text-[10px] text-slate-400">Real-time alerts</span>
+                            </div>
+                        </div>
+                        <!-- Standardized Switch -->
+                        <label class="switch">
+                            <input type="checkbox" id="push-toggle" checked>
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                    <!-- Email Digests -->
+                    <div class="px-4 py-3.5 flex items-center justify-between">
+                        <div class="flex items-center gap-3">
+                            <div class="p-2 rounded-lg bg-green-500/10 text-green-500">
+                                <span class="material-icons-round text-xl">mail</span>
+                            </div>
+                            <div class="flex flex-col">
+                                <span class="text-sm font-medium text-slate-700">Email Digests</span>
+                                <span class="text-[10px] text-slate-400">Weekly summaries</span>
+                            </div>
+                        </div>
+                        <!-- Standardized Switch -->
+                        <label class="switch">
+                            <input type="checkbox" id="email-toggle">
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <!-- Section 3: Support -->
+            <div>
+                <h2 class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-3 ml-2">Support &amp; About</h2>
+                <div
+                    class="bg-white shadow-sm rounded-xl overflow-hidden divide-y divide-slate-100 border border-slate-200">
+                    <button
+                        class="w-full px-4 py-4 flex items-center justify-between hover:bg-slate-50 transition-colors active:bg-slate-100">
+                        <div class="flex items-center gap-3">
+                            <div class="p-2 rounded-lg bg-pink-500/10 text-pink-500">
+                                <span class="material-icons-round text-xl">help_outline</span>
+                            </div>
+                            <span class="text-sm font-medium text-slate-700">Help Center</span>
+                        </div>
+                        <span class="material-icons-round text-slate-300 text-lg">chevron_right</span>
+                    </button>
+                    <button
+                        class="w-full px-4 py-4 flex items-center justify-between hover:bg-slate-50 transition-colors active:bg-slate-100">
+                        <div class="flex items-center gap-3">
+                            <div class="p-2 rounded-lg bg-teal-500/10 text-teal-500">
+                                <span class="material-icons-round text-xl">lock</span>
+                            </div>
+                            <span class="text-sm font-medium text-slate-700">Privacy Policy</span>
+                        </div>
+                        <span class="material-icons-round text-slate-300 text-lg">chevron_right</span>
+                    </button>
+                    <!-- Version Row -->
+                    <div class="w-full px-4 py-4 flex items-center justify-between">
+                        <div class="flex items-center gap-3">
+                            <div class="p-2 rounded-lg bg-gray-500/10 text-gray-500">
+                                <span class="material-icons-round text-xl">info</span>
+                            </div>
+                            <span class="text-sm font-medium text-slate-700">App Version</span>
+                        </div>
+                        <span class="text-xs font-mono text-slate-400 bg-slate-100 px-2 py-1 rounded">v2.4.0</span>
+                    </div>
+                </div>
+            </div>
+            <!-- Danger Zone -->
+            <div class="pt-4 pb-8">
+                <button
+                    onclick="localStorage.removeItem('username'); localStorage.removeItem('userPlan'); window.location.href='../0._auth_login/code.html'"
+                    class="w-full py-3.5 rounded-xl border border-red-500/20 text-red-400 font-medium text-sm bg-red-500/5 hover:bg-red-500/10 transition-colors flex items-center justify-center gap-2">
+                    <span class="material-icons-round text-lg">logout</span>
+                    <span data-t="logout">Log Out</span>
+                </button>
+                <p class="text-center text-[10px] text-slate-400 mt-6">Brand-pe Inc. © 2023</p>
+            </div>
+        </main>
+        <!-- Bottom Tab Navigation -->
+        <nav
+            class="absolute bottom-0 w-full bg-background-light/95 border-t border-slate-200 px-6 py-2 pb-6 backdrop-blur-lg z-30 flex justify-between items-center">
+            <a class="flex flex-col items-center gap-1 opacity-50 hover:opacity-100 transition-opacity"
+                href="../3._brand-pe_main_dashboard/code.html">
+                <span class="material-icons-round text-2xl text-slate-800">home</span>
+                <span class="text-[10px] font-medium text-slate-800">Home</span>
+            </a>
+            <a class="flex flex-col items-center gap-1 opacity-50 hover:opacity-100 transition-opacity"
+                href="../7._ads_&_shopify_analytics/code.html">
+                <span class="material-icons-round text-2xl text-slate-800">bar_chart</span>
+                <span class="text-[10px] font-medium text-slate-800">Analytics</span>
+            </a>
+            <!-- Active Tab -->
+            <a class="flex flex-col items-center gap-1 text-primary" href="#">
+                <span class="material-icons-round text-2xl">settings</span>
+                <span class="text-[10px] font-bold">Settings</span>
+            </a>
+            <a class="flex flex-col items-center gap-1 opacity-50 hover:opacity-100 transition-opacity" href="#">
+                <span class="material-icons-round text-2xl text-slate-800">person</span>
+                <span class="text-[10px] font-medium text-slate-500">Profile</span>
+            </a>
+        </nav>
+        <!-- Dynamic inline JS for toggle functionality only for visual demo -->
+        <script>
+            // Theme Logic
+            const html = document.documentElement;
+            const displayName = document.getElementById('display-name');
+            const displayEmail = document.getElementById('display-email');
+
+            // Load User Info
+            const savedUsername = localStorage.getItem('username') || 'Alex Morgan';
+            displayName.textContent = savedUsername;
+            displayEmail.textContent = `${savedUsername.toLowerCase().replace(/\s+/g, '')}@brand-pe.com`;
+
+            // Load Plan Info
+            const savedPlan = localStorage.getItem('userPlan') || 'Free Starter';
+            document.getElementById('current-plan-display').innerText = `Brand-pe ${savedPlan}`;
+
+
+            function applyTheme() {
+                // Force Light Mode
+                html.classList.remove('dark');
+            }
+
+            // --- Translation Engine ---
+            const translations = {
+                'en': {
+                    'settings-title': 'Settings',
+                    'edit-profile': 'Edit Profile',
+                    'lang-pref': 'Language Preference',
+                    'appearance': 'Appearance',
+                    'dark-mode': 'Dark Mode',
+                    'light-mode': 'Light Mode',
+                    'push-notif': 'Push Notifications',
+                    'email-digest': 'Email Digests',
+                    'help-center': 'Help Center',
+                    'logout': 'Log Out'
+                },
+                'hi': {
+                    'settings-title': 'सेटिंग्स',
+                    'edit-profile': 'प्रोफ़ाइल संपादित करें',
+                    'lang-pref': 'भाषा की प्राथमिकता',
+                    'appearance': 'दिखावट',
+                    'dark-mode': 'डार्क मोड',
+                    'light-mode': 'लाइट मोड',
+                    'push-notif': 'पुश नोटिफिकेशन',
+                    'email-digest': 'ईमेल डाइजेस्ट',
+                    'help-center': 'सहायता केंद्र',
+                    'logout': 'लॉग आउट'
+                }
+            };
+
+            function applyTranslations() {
+                const lang = localStorage.getItem('lang') || 'en';
+                document.querySelectorAll('[data-t]').forEach(el => {
+                    const key = el.getAttribute('data-t');
+                    if (translations[lang] && translations[lang][key]) {
+                        el.innerHTML = translations[lang][key];
+                    }
+                });
+                document.getElementById('current-lang-text').innerText = lang === 'hi' ? 'Hindi' : 'English';
+            }
+
+            // Toggle Language Handler
+            document.getElementById('lang-toggle-row').addEventListener('click', () => {
+                const currentLang = localStorage.getItem('lang') || 'en';
+                const nextLang = currentLang === 'en' ? 'hi' : 'en';
+                localStorage.setItem('lang', nextLang);
+                applyTranslations();
+                applyTheme(); // Refresh theme status text
+            });
+
+            // Initial Apply
+            applyTranslations();
+            applyTheme();
+
+        </script>
+    </div>
+</body>
+
+</html>

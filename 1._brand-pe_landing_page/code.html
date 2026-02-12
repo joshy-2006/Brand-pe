@@ -1,0 +1,885 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Brand-pe Landing Page</title>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&amp;display=swap"
+        rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: 'false',
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#FF6B00",
+                        "secondary": "#135bec",
+                        "background-light": "#f6f6f8",
+                        "background-dark": "#121212",
+                    },
+                    fontFamily: {
+                        "display": ["Manrope", "sans-serif"]
+                    },
+                },
+            },
+        }
+    </script>
+    <style>
+        /* Custom Utilities for Glassmorphism - Theme Aware */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(0, 0, 0, 0.05);
+            transition: background 0.3s, border 0.3s;
+        }
+
+        .dark .glass-card {
+            background: linear-gradient(145deg, rgba(30, 30, 30, 0.6) 0%, rgba(20, 20, 20, 0.4) 100%);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .glass-header {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+            transition: background 0.3s, border 0.3s;
+        }
+
+        .dark .glass-header {
+            background: rgba(18, 18, 18, 0.85);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .text-gradient-orange {
+            background: linear-gradient(135deg, #FF6B00 0%, #FF9E53 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .cta-shine {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta-shine::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            animation: shine 3s infinite;
+        }
+
+        /* Pricing Slider Style */
+        .pricing-toggle {
+            position: relative;
+            display: flex;
+            background: rgba(0, 0, 0, 0.05);
+            padding: 4px;
+            border-radius: 99px;
+            width: 220px;
+            margin: 24px auto 0;
+        }
+
+        .pricing-slider {
+            position: absolute;
+            top: 4px;
+            bottom: 4px;
+            width: calc(50% - 4px);
+            background: #FF6B00;
+            border-radius: 99px;
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 4px 12px rgba(255, 107, 0, 0.3);
+        }
+
+        .pricing-btn {
+            flex: 1;
+            z-index: 1;
+            padding: 8px 0;
+            font-size: 14px;
+            font-weight: 700;
+            transition: color 0.3s;
+        }
+
+        /* Language Toggle Style */
+        .lang-toggle {
+            position: relative;
+            display: flex;
+            background: rgba(0, 0, 0, 0.05);
+            padding: 2px;
+            border-radius: 99px;
+            width: 80px;
+            height: 32px;
+            border: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
+        .dark .lang-toggle {
+            background: rgba(255, 255, 255, 0.05);
+            border-color: rgba(255, 255, 255, 0.05);
+        }
+
+        .lang-slider {
+            position: absolute;
+            top: 2px;
+            bottom: 2px;
+            width: calc(50% - 2px);
+            background: #FF6B00;
+            border-radius: 99px;
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 2px 8px rgba(255, 107, 0, 0.2);
+        }
+
+        .lang-btn {
+            flex: 1;
+            z-index: 1;
+            font-size: 10px;
+            font-weight: 800;
+            transition: color 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Interactive Grid Background */
+        .grid-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            pointer-events: none;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .grid-pattern {
+            position: absolute;
+            width: 200%;
+            height: 200%;
+            background-image:
+                radial-gradient(circle, rgba(255, 107, 0, 0.08) 1.5px, transparent 1.5px);
+            background-size: 60px 60px;
+            animation: pulse-grid 10s infinite alternate ease-in-out;
+        }
+
+        .mouse-glow {
+            position: absolute;
+            width: 800px;
+            height: 800px;
+            background: radial-gradient(circle, rgba(255, 107, 0, 0.12) 0%, transparent 70%);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            pointer-events: none;
+            transition: opacity 0.5s ease;
+            opacity: 0;
+            mix-blend-mode: screen;
+            z-index: 1;
+        }
+
+        body:hover .mouse-glow {
+            opacity: 1;
+        }
+
+        @keyframes pulse-grid {
+            0% {
+                transform: scale(1);
+                opacity: 0.2;
+            }
+
+            100% {
+                transform: scale(1.05);
+                opacity: 0.5;
+            }
+        }
+
+        /* Page Transition */
+        @keyframes pageFadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Page Transition */
+        @keyframes pageFadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Marquee Animation */
+        @keyframes marquee {
+            0% {
+                transform: translateX(0);
+            }
+
+            100% {
+                transform: translateX(-50%);
+            }
+        }
+
+        .marquee-container {
+            overflow: hidden;
+            display: flex;
+            user-select: none;
+            gap: 24px;
+        }
+
+        .marquee-content {
+            flex-shrink: 0;
+            display: flex;
+            justify-content: space-around;
+            min-width: 100%;
+            gap: 24px;
+            animation: marquee 30s linear infinite;
+        }
+
+        .marquee-content:hover {
+            animation-play-state: paused;
+        }
+    </style>
+</head>
+
+<body
+    class="bg-background-light font-display text-gray-900 antialiased overflow-x-hidden transition-colors duration-300 page-animate">
+
+    <!-- Interactive Grid Background -->
+    <div class="grid-container">
+        <div class="grid-pattern"></div>
+        <div id="mouse-glow" class="mouse-glow"></div>
+    </div>
+    <div class="relative min-h-screen pb-24">
+
+        <!-- Sticky Header -->
+        <header class="fixed top-0 left-0 right-0 z-50 glass-header px-6 py-4 flex items-center justify-between">
+            <div class="flex items-center gap-3 cursor-pointer group"
+                onclick="window.scrollTo({top: 0, behavior: 'smooth'})">
+                <div class="relative">
+                    <div
+                        class="absolute inset-0 bg-primary blur-lg opacity-20 group-hover:opacity-40 transition-opacity">
+                    </div>
+                    <div
+                        class="relative w-10 h-10 rounded-xl bg-gradient-to-br from-primary to-orange-600 flex items-center justify-center text-white shadow-lg shadow-primary/20 transition-transform group-hover:scale-105">
+                        <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path
+                                d="M7 16V4H13C15.2091 4 17 5.79086 17 8C17 10.2091 15.2091 12 13 12H7M7 12H11C13.2091 12 15 13.7909 15 16C15 18.2091 13.2091 20 11 20H7V12Z"
+                                stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
+                            <path d="M17 14L20 11M20 11L23 14M20 11V20" stroke="white" stroke-width="2"
+                                stroke-linecap="round" stroke-linejoin="round"
+                                class="opacity-0 group-hover:opacity-100 transition-opacity" />
+                        </svg>
+                    </div>
+                </div>
+                <div class="flex flex-col -space-y-1">
+                    <span
+                        class="font-black text-xl tracking-tight text-gray-900 dark:text-white transition-colors">Brand-pe</span>
+                    <span data-t="grow-faster"
+                        class="text-[10px] font-bold text-primary uppercase tracking-tighter">Grow Faster</span>
+                </div>
+            </div>
+
+            <div class="flex items-center gap-3">
+                <!-- Login Link -->
+                <a data-t="login" id="header-login-link" href="../0._auth_login/code.html"
+                    class="hidden sm:block text-sm font-semibold text-gray-600 dark:text-gray-300 hover:text-primary transition-colors mr-2">
+                    Login
+                </a>
+
+
+
+                <!-- Language Toggle -->
+                <div class="lang-toggle ml-1">
+                    <div id="lang-slider" class="lang-slider"></div>
+                    <button onclick="setLanguage('en')" id="btn-lang-en" class="lang-btn text-white">EN</button>
+                    <button onclick="setLanguage('hi')" id="btn-lang-hi" class="lang-btn text-gray-500">HI</button>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="pt-24 px-6 space-y-12">
+
+            <!-- Hero Section -->
+            <section class="text-center space-y-8 py-10">
+                <div
+                    class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 border border-primary/20 mb-6 cursor-pointer hover:bg-primary/20 transition-colors">
+                    <span class="w-2 h-2 rounded-full bg-primary animate-pulse"></span>
+                    <span class="text-xs font-medium text-primary tracking-wide uppercase">New Features Live</span>
+                </div>
+
+                <h1 data-t="main-headline"
+                    class="text-4xl md:text-7xl font-black text-gray-900 dark:text-white leading-tight tracking-tight">
+                    Scale Your Brand with <span class="text-gradient-orange">Smart AI</span>
+                </h1>
+                <p data-t="sub-headline"
+                    class="text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto leading-relaxed">
+                    Automate content, analyze competitors, and manage all your ads in one powerful dashboard built for
+                    India's fastest-growing brands.
+                </p>
+                <div class="flex flex-col sm:flex-row gap-5 justify-center md:justify-start">
+                    <button data-t="get-started" id="hero-get-started"
+                        onclick="window.location.href='../0b._auth_signup/code.html'"
+                        class="px-10 py-4 z-10 bg-gradient-to-r from-primary to-orange-600 text-white font-extrabold rounded-2xl shadow-[0_20px_50px_rgba(255,107,0,0.3)] hover:shadow-[0_20px_60px_rgba(255,107,0,0.5)] hover:-translate-y-1 active:scale-95 transition-all duration-300 text-sm tracking-wide flex items-center justify-center gap-2 group ring-1 ring-white/20">
+                        <span data-t="get-started-span">Get Started Free</span>
+                        <span
+                            class="material-icons-round text-lg group-hover:translate-x-1 transition-transform">arrow_forward</span>
+                    </button>
+                    <button data-t="how-it-works"
+                        onclick="document.getElementById('features').scrollIntoView({ behavior: 'smooth' })"
+                        class="px-10 py-4 z-10 bg-white/5 dark:bg-white/5 text-gray-800 dark:text-white font-extrabold rounded-2xl border border-gray-200 dark:border-white/10 backdrop-blur-md hover:bg-gray-50 dark:hover:bg-white/10 hover:-translate-y-1 active:scale-95 transition-all duration-300 text-sm tracking-wide shadow-xl shadow-black/5 flex items-center justify-center">
+                        How it Works
+                    </button>
+                </div>
+                <div class="flex items-center justify-center gap-2 text-sm text-gray-500 font-medium">
+                    <div class="flex -space-x-2">
+                        <div class="w-8 h-8 rounded-full border-2 border-white dark:border-background-dark bg-gray-200">
+                        </div>
+                        <div class="w-8 h-8 rounded-full border-2 border-white dark:border-background-dark bg-gray-300">
+                        </div>
+                        <div class="w-8 h-8 rounded-full border-2 border-white dark:border-background-dark bg-gray-400">
+                        </div>
+                    </div>
+                    <span data-t="trusted-by">Trusted by 5,000+ top Indian creators & brands</span>
+                </div>
+            </section>
+
+            <!-- Offer Carousel -->
+            <section class="border-y border-black/5 dark:border-white/5 py-8 overflow-hidden">
+                <div class="marquee-container">
+                    <div class="marquee-content">
+                        <!-- Offer 1 -->
+                        <div
+                            class="flex items-center gap-4 px-8 py-3 glass-card rounded-2xl border border-primary/20 shrink-0">
+                            <span
+                                class="bg-primary text-white text-[10px] font-black px-2 py-0.5 rounded uppercase">Offer</span>
+                            <span class="text-sm font-bold text-gray-800 dark:text-gray-100">Flat 50% OFF for first 100
+                                users!</span>
+                            <span class="text-primary material-icons-round text-sm">local_fire_department</span>
+                        </div>
+                        <!-- Offer 2 -->
+                        <div
+                            class="flex items-center gap-4 px-8 py-3 glass-card rounded-2xl border border-blue-500/20 shrink-0">
+                            <span
+                                class="bg-blue-500 text-white text-[10px] font-black px-2 py-0.5 rounded uppercase">Beta</span>
+                            <span class="text-sm font-bold text-gray-800 dark:text-gray-100">Free AI Video Scripting for
+                                1 Year</span>
+                            <span class="text-blue-500 material-icons-round text-sm">auto_videocam</span>
+                        </div>
+                        <!-- Offer 3 -->
+                        <div
+                            class="flex items-center gap-4 px-8 py-3 glass-card rounded-2xl border-orange-500/20 shrink-0">
+                            <span
+                                class="bg-orange-500 text-white text-[10px] font-black px-2 py-0.5 rounded uppercase">Launch</span>
+                            <span class="text-sm font-bold text-gray-800 dark:text-gray-100">Pro Plan at ₹999
+                                Lifetime</span>
+                            <span class="text-orange-500 material-icons-round text-sm">stars</span>
+                        </div>
+                        <!-- Offer 4 -->
+                        <div
+                            class="flex items-center gap-4 px-8 py-3 glass-card rounded-2xl border-green-500/20 shrink-0">
+                            <span
+                                class="bg-green-500 text-white text-[10px] font-black px-2 py-0.5 rounded uppercase">Refer</span>
+                            <span class="text-sm font-bold text-gray-800 dark:text-gray-100">Get 3 Months FREE via
+                                Referral</span>
+                            <span class="text-green-500 material-icons-round text-sm">group_add</span>
+                        </div>
+                    </div>
+                    <!-- Duplicate for infinite scroll -->
+                    <div class="marquee-content">
+                        <div
+                            class="flex items-center gap-4 px-8 py-3 glass-card rounded-2xl border border-primary/20 shrink-0">
+                            <span
+                                class="bg-primary text-white text-[10px] font-black px-2 py-0.5 rounded uppercase">Offer</span>
+                            <span class="text-sm font-bold text-gray-800 dark:text-gray-100">Flat 50% OFF for first 100
+                                users!</span>
+                            <span class="text-primary material-icons-round text-sm">local_fire_department</span>
+                        </div>
+                        <div
+                            class="flex items-center gap-4 px-8 py-3 glass-card rounded-2xl border border-blue-500/20 shrink-0">
+                            <span
+                                class="bg-blue-500 text-white text-[10px] font-black px-2 py-0.5 rounded uppercase">Beta</span>
+                            <span class="text-sm font-bold text-gray-800 dark:text-gray-100">Free AI Video Scripting for
+                                1 Year</span>
+                            <span class="text-blue-500 material-icons-round text-sm">auto_videocam</span>
+                        </div>
+                        <div
+                            class="flex items-center gap-4 px-8 py-3 glass-card rounded-2xl border-orange-500/20 shrink-0">
+                            <span
+                                class="bg-orange-500 text-white text-[10px] font-black px-2 py-0.5 rounded uppercase">Launch</span>
+                            <span class="text-sm font-bold text-gray-800 dark:text-gray-100">Pro Plan at ₹999
+                                Lifetime</span>
+                            <span class="text-orange-500 material-icons-round text-sm">stars</span>
+                        </div>
+                        <div
+                            class="flex items-center gap-4 px-8 py-3 glass-card rounded-2xl border-green-500/20 shrink-0">
+                            <span
+                                class="bg-green-500 text-white text-[10px] font-black px-2 py-0.5 rounded uppercase">Refer</span>
+                            <span class="text-sm font-bold text-gray-800 dark:text-gray-100">Get 3 Months FREE via
+                                Referral</span>
+                            <span class="text-green-500 material-icons-round text-sm">group_add</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Features Grid -->
+            <section id="features" class="space-y-12">
+                <div class="text-center">
+                    <h2 data-t="features" class="text-3xl font-bold text-gray-900 dark:text-white transition-colors">
+                        Everything you need
+                        to dominate social</h2>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <!-- Feature Card 1 -->
+                    <div
+                        class="glass-card p-8 rounded-3xl relative overflow-hidden group hover:border-primary/50 transition-all duration-500">
+                        <div
+                            class="w-14 h-14 rounded-2xl bg-primary/10 flex items-center justify-center mb-6 text-primary group-hover:scale-110 transition-transform">
+                            <span class="material-icons-round text-3xl">auto_awesome</span>
+                        </div>
+                        <h3 data-t="f1-title" class="text-xl font-bold mb-3 text-gray-900 dark:text-white">AI Content
+                            Engine</h3>
+                        <p data-t="f1-desc" class="text-gray-500 dark:text-gray-400 text-sm leading-relaxed">Generate
+                            viral captions and posts designed specifically for the Indian audience in seconds.</p>
+                    </div>
+
+                    <!-- Feature Card 2 -->
+                    <div
+                        class="glass-card p-8 rounded-3xl relative overflow-hidden group hover:border-blue-500/50 transition-all duration-500">
+                        <div
+                            class="w-14 h-14 rounded-2xl bg-blue-500/10 flex items-center justify-center mb-6 text-blue-500 group-hover:scale-110 transition-transform">
+                            <span class="material-icons-round text-3xl">ads_click</span>
+                        </div>
+                        <h3 data-t="f2-title" class="text-xl font-bold mb-3 text-gray-900 dark:text-white">Ads Mastery
+                        </h3>
+                        <p data-t="f2-desc" class="text-gray-500 dark:text-gray-400 text-sm leading-relaxed">Manage
+                            Instagram, Facebook, and Google Ads from a single simplified dashboard.</p>
+                    </div>
+
+                    <!-- Feature Card 3 -->
+                    <div
+                        class="glass-card p-8 rounded-3xl relative overflow-hidden group hover:border-purple-500/50 transition-all duration-500">
+                        <div
+                            class="w-14 h-14 rounded-2xl bg-purple-500/10 flex items-center justify-center mb-6 text-purple-500 group-hover:scale-110 transition-transform">
+                            <span class="material-icons-round text-3xl">insights</span>
+                        </div>
+                        <h3 data-t="f3-title" class="text-xl font-bold mb-3 text-gray-900 dark:text-white">Competitor
+                            Intel</h3>
+                        <p data-t="f3-desc" class="text-gray-500 dark:text-gray-400 text-sm leading-relaxed">Spy on
+                            what’s working for your competitors and stay ahead of market trends.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Pricing Section -->
+            <section id="pricing" class="space-y-12">
+                <div class="text-center space-y-4">
+                    <h2 data-t="pricing-title"
+                        class="text-3xl font-bold text-gray-900 dark:text-white transition-colors">Simple,
+                        Scale-friendly Pricing</h2>
+                    <div class="pricing-toggle mx-auto">
+                        <div id="pricing-slider" class="pricing-slider"></div>
+                        <button id="btn-monthly" data-t="p-monthly" class="pricing-btn text-white">Monthly</button>
+                        <button id="btn-yearly" data-t="p-yearly" class="pricing-btn text-gray-500">Yearly</button>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                    <!-- Free Plan -->
+                    <div
+                        class="glass-card p-8 rounded-3xl border border-black/5 dark:border-white/10 flex flex-col items-center text-center space-y-6">
+                        <h3 class="text-xl font-bold text-gray-900 dark:text-white">Free Starter</h3>
+                        <p class="text-gray-500 dark:text-gray-400 text-sm">Best for individuals starting out</p>
+                        <div class="text-4xl font-black text-gray-900 dark:text-white">₹0</div>
+                        <button onclick="window.location.href='../0b._auth_signup/code.html?plan=Free+Starter'"
+                            class="w-full py-4 bg-primary/10 text-primary font-bold rounded-2xl hover:bg-primary hover:text-white transition-all">
+                            Get Started
+                        </button>
+                        <ul class="space-y-4 text-sm text-gray-500">
+                            <li class="flex items-center gap-2"><span
+                                    class="material-icons-round text-primary text-sm">check_circle</span> 1 Social
+                                Account</li>
+                            <li class="flex items-center gap-2"><span
+                                    class="material-icons-round text-primary text-sm">check_circle</span> Basic
+                                Analytics</li>
+                        </ul>
+                    </div>
+
+                    <!-- Pro Plan -->
+                    <div
+                        class="glass-card rounded-3xl p-8 flex flex-col border border-primary/50 bg-primary/5 relative scale-105 z-10">
+                        <div
+                            class="absolute -top-3 left-1/2 -translate-x-1/2 bg-primary text-white text-[10px] font-black px-4 py-1 rounded-full uppercase tracking-widest">
+                            Most Popular</div>
+                        <h3 data-t="pro-growth" class="text-xl font-bold mb-2">Pro Growth</h3>
+                        <p data-t="pro-desc" class="text-sm text-gray-400 h-10">Small brands growing fast.</p>
+                        <div class="my-6">
+                            <span class="text-4xl font-black price-monthly">₹999</span>
+                            <span class="text-4xl font-black price-yearly hidden">₹9,999</span>
+                            <span class="text-gray-400 text-sm period">/mo</span>
+                        </div>
+                        <button data-t="start-trial" onclick="window.location.href='../1b._paywall_pricing/code.html'"
+                            class="w-full py-3 rounded-xl bg-primary text-white font-bold mb-8 shadow-lg shadow-primary/20 hover:scale-105 transition-all">Start
+                            14-Day Trial</button>
+                        <ul class="space-y-4 text-sm text-gray-400">
+                            <li class="flex items-center gap-2"><span
+                                    class="material-icons-round text-primary text-sm">check_circle</span> 5 Social
+                                Accounts</li>
+                            <li class="flex items-center gap-2"><span
+                                    class="material-icons-round text-primary text-sm">check_circle</span> Advanced
+                                Reports</li>
+                        </ul>
+                    </div>
+
+                    <!-- Business Plan -->
+                    <div
+                        class="glass-card rounded-3xl p-8 flex flex-col hover:border-primary/30 transition-all duration-500">
+                        <h3 data-t="business-elite" class="text-xl font-bold mb-2">Business Elite</h3>
+                        <p data-t="business-desc" class="text-sm text-gray-500 h-10">Agencies & large teams.</p>
+                        <div class="my-6">
+                            <span class="text-4xl font-black price-monthly">₹2,499</span>
+                            <span class="text-4xl font-black price-yearly hidden">₹24,999</span>
+                            <span class="text-gray-400 text-sm period">/mo</span>
+                        </div>
+                        <button data-t="start-trial" onclick="window.location.href='../1b._paywall_pricing/code.html'"
+                            class="w-full py-3 rounded-xl border border-gray-200 dark:border-white/10 font-bold mb-8 hover:bg-white/5 transition-all">Start
+                            14-Day Trial</button>
+                    </div>
+
+                    <!-- Enterprise Plan -->
+                    <div
+                        class="glass-card rounded-3xl p-8 flex flex-col hover:border-primary/30 transition-all duration-500">
+                        <h3 data-t="enterprise" class="text-xl font-bold mb-2">Enterprise</h3>
+                        <p data-t="enterprise-desc" class="text-sm text-gray-500 h-10">Custom global solutions.</p>
+                        <div class="my-6">
+                            <span data-t="custom" class="text-4xl font-black">Custom</span>
+                        </div>
+                        <button data-t="contact-sales"
+                            class="w-full py-3 rounded-xl border border-gray-200 dark:border-white/10 font-bold mb-8 hover:bg-white/5 transition-all">Contact
+                            Sales</button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Footer / Contact Section -->
+            <footer id="contact" class="pt-20 pb-10 border-t border-black/5 dark:border-white/5">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
+                    <!-- Left: Contact Details & Info -->
+                    <div class="space-y-12">
+                        <div class="space-y-4">
+                            <div class="flex items-center gap-3">
+                                <div
+                                    class="w-10 h-10 rounded-xl bg-primary flex items-center justify-center text-white font-bold text-xl shadow-lg shadow-primary/20">
+                                    B</div>
+                                <span
+                                    class="text-2xl font-black tracking-tight text-gray-900 dark:text-white">Brand-pe</span>
+                            </div>
+                            <p class="text-gray-500 dark:text-gray-400 max-w-sm leading-relaxed">
+                                Empowering Indian creators and brands with AI-driven social media intelligence. Join the
+                                elite 1% today.
+                            </p>
+                        </div>
+
+                        <div class="space-y-6">
+                            <h3 class="text-lg font-bold text-gray-900 dark:text-white">Get in Touch</h3>
+                            <div class="space-y-4">
+                                <div class="flex items-start gap-4 group">
+                                    <div
+                                        class="w-10 h-10 rounded-full bg-gray-100 dark:bg-white/5 flex items-center justify-center text-primary group-hover:scale-110 transition-transform">
+                                        <span class="material-icons-round text-lg">location_on</span>
+                                    </div>
+                                    <div>
+                                        <p class="text-xs font-bold uppercase tracking-wider text-gray-400 mb-1">Office
+                                        </p>
+                                        <p class="text-sm text-gray-600 dark:text-gray-300">19th Floor, Platina, G
+                                            Block, BKC,<br>Bandra East, Mumbai, MH 400051</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-start gap-4 group">
+                                    <div
+                                        class="w-10 h-10 rounded-full bg-gray-100 dark:bg-white/5 flex items-center justify-center text-primary group-hover:scale-110 transition-transform">
+                                        <span class="material-icons-round text-lg">call</span>
+                                    </div>
+                                    <div>
+                                        <p class="text-xs font-bold uppercase tracking-wider text-gray-400 mb-1">Phone
+                                        </p>
+                                        <p class="text-sm text-gray-600 dark:text-gray-300">+91 22 4090 7000</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-start gap-4 group">
+                                    <div
+                                        class="w-10 h-10 rounded-full bg-gray-100 dark:bg-white/5 flex items-center justify-center text-primary group-hover:scale-110 transition-transform">
+                                        <span class="material-icons-round text-lg">mail</span>
+                                    </div>
+                                    <div>
+                                        <p class="text-xs font-bold uppercase tracking-wider text-gray-400 mb-1">Email
+                                        </p>
+                                        <p class="text-sm text-gray-600 dark:text-gray-300">hello@brand-pe.com</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Socials -->
+                        <div class="flex gap-4">
+                            <a href="#"
+                                class="w-10 h-10 rounded-full bg-gray-100 dark:bg-white/5 flex items-center justify-center text-gray-500 hover:text-primary hover:bg-primary/10 transition-all">
+                                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                                    <path
+                                        d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />
+                                </svg>
+                            </a>
+                            <a href="#"
+                                class="w-10 h-10 rounded-full bg-gray-100 dark:bg-white/5 flex items-center justify-center text-gray-500 hover:text-primary hover:bg-primary/10 transition-all">
+                                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                                    <path
+                                        d="M23.953 4.57a10 10 0 01-2.825.775 4.958 4.958 0 002.163-2.723c-.951.555-2.005.959-3.127 1.184a4.92 4.92 0 00-8.384 4.482C7.69 8.095 4.067 6.13 1.64 3.162a4.822 4.822 0 00-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 01-2.228-.616v.06a4.923 4.923 0 003.946 4.84 4.996 4.996 0 01-2.212.085 4.936 4.936 0 004.604 3.417 9.867 9.867 0 01-6.102 2.105c-.39 0-.779-.023-1.17-.067a13.995 13.995 0 007.557 2.209c9.053 0 13.998-7.496 13.998-13.985 0-.21 0-.42-.015-.63A9.935 9.935 0 0024 4.59z" />
+                                </svg>
+                            </a>
+                            <a href="#"
+                                class="w-10 h-10 rounded-full bg-gray-100 dark:bg-white/5 flex items-center justify-center text-gray-500 hover:text-primary hover:bg-primary/10 transition-all">
+                                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                                    <path
+                                        d="M12 0C8.74 0 8.333.015 7.053.072 5.775.132 4.905.333 4.14.63c-.789.306-1.459.717-2.126 1.384S.935 3.35.63 4.14C.333 4.905.131 5.775.072 7.053.012 8.333 0 8.74 0 12s.012 3.667.072 4.947c.06 1.277.261 2.148.558 2.913.306.788.717 1.459 1.384 2.126s1.336 1.078 2.126 1.384c.766.296 1.636.499 2.913.558C8.333 23.988 8.74 24 12 24s3.667-.012 4.947-.072c1.277-.06 2.148-.262 2.913-.558.788-.306 1.459-.718 2.126-1.384s1.078-1.336 1.384-2.126c.296-.765.499-1.636.558-2.913.06-1.28.072-1.687.072-4.947s-.012-3.667-.072-4.947c-.06-1.277-.262-2.149-.558-2.913-.306-.789-.718-1.459-1.384-2.126s-1.336-1.077-2.126-1.384c-.765-.296-1.636-.499-2.913-.558C15.667.012 15.26 0 12 0zm0 2.16c3.203 0 3.585.016 4.85.071 1.17.055 1.805.249 2.227.415.562.217.96.477 1.382.896.419.42.679.819.896 1.381.164.422.36 1.057.413 2.227.057 1.266.07 1.646.07 4.85s-.015 3.584-.071 4.85c-.055 1.17-.249 1.805-.415 2.227-.217.562-.477.96-.896 1.382-.42.419-.819.679-1.381.896-.422.164-1.056.36-2.227.413-1.266.057-1.646.07-4.85.07s-3.584-.015-4.85-.071c-1.17-.055-1.805-.249-2.227-.415-.562-.217-.96-.477-1.382-.896-.419-.42-.679-.819-.896-1.381-.164-.422-.36-1.057-.413-2.227-.057-1.266-.07-1.646-.07-4.85s.016-3.584.071-4.85c.055-1.17.249-1.805.415-2.227.217-.562.477-.96.896-1.382.42-.419.819-.679 1.381-.896.422-.164 1.057-.36 2.227-.413 1.266-.057 1.646-.07 4.85-.07zM12 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z" />
+                                </svg>
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Right: Contact Form -->
+                    <div class="glass-card p-8 rounded-3xl border border-black/5 dark:border-white/10 shadow-xl">
+                        <form class="space-y-6">
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div class="space-y-1.5">
+                                    <label class="text-xs font-bold uppercase tracking-wider text-gray-400 ml-1">Full
+                                        Name</label>
+                                    <input type="text" placeholder="Aarav Sharma"
+                                        class="w-full bg-gray-50 dark:bg-white/5 border border-gray-100 dark:border-white/10 rounded-xl py-3 px-4 text-sm focus:outline-none focus:border-primary transition-all">
+                                </div>
+                                <div class="space-y-1.5">
+                                    <label class="text-xs font-bold uppercase tracking-wider text-gray-400 ml-1">Phone
+                                        Number</label>
+                                    <input type="tel" placeholder="+91 98765 43210"
+                                        class="w-full bg-gray-50 dark:bg-white/5 border border-gray-100 dark:border-white/10 rounded-xl py-3 px-4 text-sm focus:outline-none focus:border-primary transition-all">
+                                </div>
+                            </div>
+                            <div class="space-y-1.5">
+                                <label class="text-xs font-bold uppercase tracking-wider text-gray-400 ml-1">Email
+                                    Address</label>
+                                <input type="email" placeholder="aarav@company.com"
+                                    class="w-full bg-gray-50 dark:bg-white/5 border border-gray-100 dark:border-white/10 rounded-xl py-3 px-4 text-sm focus:outline-none focus:border-primary transition-all">
+                            </div>
+                            <div class="space-y-1.5">
+                                <label
+                                    class="text-xs font-bold uppercase tracking-wider text-gray-400 ml-1">Message</label>
+                                <textarea rows="3" placeholder="How can we help you grow?"
+                                    class="w-full bg-gray-50 dark:bg-white/5 border border-gray-100 dark:border-white/10 rounded-xl py-3 px-4 text-sm focus:outline-none focus:border-primary transition-all resize-none"></textarea>
+                            </div>
+                            <button type="submit"
+                                class="w-full py-4 bg-primary text-white font-bold rounded-xl shadow-lg shadow-primary/20 hover:shadow-primary/40 active:scale-[0.98] transition-all flex items-center justify-center gap-2 group">
+                                Send Message
+                                <span
+                                    class="material-icons-round text-lg group-hover:translate-x-1 transition-transform">send</span>
+                            </button>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Copyright Bar -->
+                <div
+                    class="mt-20 pt-8 border-t border-black/5 dark:border-white/5 flex flex-col md:flex-row justify-between items-center gap-4 text-xs font-medium text-gray-400">
+                    <p>© 2026 Brand-pe Media Private Limited. All rights reserved.</p>
+                    <div class="flex gap-8">
+                        <a href="#" class="hover:text-primary transition-colors">Privacy Policy</a>
+                        <a href="#" class="hover:text-primary transition-colors">Terms of Service</a>
+                        <a href="#" class="hover:text-primary transition-colors">Cookies</a>
+                    </div>
+                </div>
+            </footer>
+        </main>
+    </div>
+    </main>
+    </div>
+
+    <!-- Logic Script -->
+    <script>
+        // Theme Switch Logic Removed
+
+        // --- Pricing Toggle ---
+        const btnMonthly = document.getElementById('btn-monthly');
+        const btnYearly = document.getElementById('btn-yearly');
+        const pricingSlider = document.getElementById('pricing-slider');
+
+        function setPricing(mode) {
+            const monthlyPrices = document.querySelectorAll('.price-monthly');
+            const yearlyPrices = document.querySelectorAll('.price-yearly');
+            const periods = document.querySelectorAll('.period');
+
+            if (mode === 'monthly') {
+                if (pricingSlider) pricingSlider.style.transform = 'translateX(0)';
+                btnMonthly.classList.add('text-white');
+                btnMonthly.classList.remove('text-gray-500');
+                btnYearly.classList.add('text-gray-500');
+                btnYearly.classList.remove('text-white');
+
+                monthlyPrices.forEach(el => el.classList.remove('hidden'));
+                yearlyPrices.forEach(el => el.classList.add('hidden'));
+                periods.forEach(el => el.textContent = '/mo');
+            } else {
+                if (pricingSlider) pricingSlider.style.transform = 'translateX(100%)';
+                btnYearly.classList.add('text-white');
+                btnYearly.classList.remove('text-gray-500');
+                btnMonthly.classList.add('text-gray-500');
+                btnMonthly.classList.remove('text-white');
+
+                monthlyPrices.forEach(el => el.classList.add('hidden'));
+                yearlyPrices.forEach(el => el.classList.remove('hidden'));
+                periods.forEach(el => el.textContent = '/yr');
+            }
+        }
+
+        if (btnMonthly) btnMonthly.addEventListener('click', () => setPricing('monthly'));
+        if (btnYearly) btnYearly.addEventListener('click', () => setPricing('yearly'));
+
+        // --- Language & Translation ---
+        const translations = {
+            'en': {
+                'grow-faster': 'Grow Faster',
+                'login': 'Login',
+                'main-headline': 'Scale Your Brand with <span class="text-gradient-orange">Smart AI</span>',
+                'sub-headline': 'Automate content, analyze competitors, and manage all your ads in one powerful dashboard built for India\'s fastest-growing brands.',
+                'get-started': 'Get Started Free',
+                'trusted-by': 'Trusted by 5,000+ top Indian creators & brands',
+                'features': 'Everything you need to dominate social',
+                'p-monthly': 'Monthly',
+                'p-yearly': 'Yearly',
+                'free-starter': 'Free Starter',
+                'pro-growth': 'Pro Growth',
+                'business-elite': 'Business Elite',
+                'enterprise': 'Enterprise',
+                'per-mo': '/mo',
+                'per-yr': '/yr',
+                'analytics-desc': '150%+ growth in organic reach in the last week.',
+                'dashboard': 'Dashboard'
+            },
+            'hi': {
+                'grow-faster': 'तेज़ी से बढ़ें',
+                'login': 'लॉगिन',
+                'main-headline': '<span class="text-gradient-orange">स्मार्ट AI</span> के साथ अपना ब्रांड बढ़ाएं',
+                'sub-headline': 'कंटेंट ऑटोमेट करें, प्रतियोगियों का विश्लेषण करें, और भारत के सबसे तेज़ी से बढ़ते ब्रांडों के लिए बने एक शक्तिशाली डैशबोर्ड में अपने सभी विज्ञापनों को प्रबंधित करें।',
+                'get-started': 'मुफ्त में शुरू करें',
+                'trusted-by': '5,000+ शीर्ष भारतीय क्रिएटर्स और ब्रांडों द्वारा भरोसेमंद',
+                'features': 'सोशल मीडिया पर राज करने के लिए सब कुछ',
+                'p-monthly': 'मासिक',
+                'p-yearly': 'वार्षिक',
+                'free-starter': 'फ्री स्टार्टर',
+                'pro-growth': 'प्रो ग्रोथ',
+                'business-elite': 'बिजनेस एलीट',
+                'enterprise': 'एंटरप्राइज़',
+                'per-mo': '/माह',
+                'per-yr': '/वर्ष',
+                'analytics-desc': 'पिछले सप्ताह में 150%+ ऑर्गेनिक पहुंच में वृद्धि।',
+                'dashboard': 'डैशबोर्ड'
+            }
+        };
+
+        function setLanguage(lang) {
+            localStorage.setItem('lang', lang);
+            const enBtn = document.getElementById('btn-lang-en');
+            const hiBtn = document.getElementById('btn-lang-hi');
+            const slider = document.getElementById('lang-slider');
+
+            if (lang === 'en') {
+                slider.style.transform = 'translateX(0)';
+                enBtn.classList.add('text-white');
+                hiBtn.classList.remove('text-white');
+                hiBtn.classList.add('text-gray-500');
+            } else {
+                slider.style.transform = 'translateX(100%)';
+                hiBtn.classList.add('text-white');
+                enBtn.classList.remove('text-white');
+                enBtn.classList.add('text-gray-500');
+            }
+
+            document.querySelectorAll('[data-t]').forEach(el => {
+                const key = el.getAttribute('data-t');
+                if (translations[lang] && translations[lang][key]) {
+                    el.innerHTML = translations[lang][key];
+                }
+            });
+
+            // Re-check session for text update
+            updateSessionUI();
+        }
+
+        function updateSessionUI() {
+            const username = localStorage.getItem('username');
+            const lang = localStorage.getItem('lang') || 'en';
+            const loginLink = document.getElementById('header-login-link');
+            const heroBtn = document.getElementById('hero-get-started');
+
+            if (username) {
+                const dashText = translations[lang]['dashboard'] || 'Dashboard';
+                loginLink.innerText = dashText;
+                loginLink.href = '../3._brand-pe_main_dashboard/code.html';
+
+                if (heroBtn) {
+                    heroBtn.onclick = () => window.location.href = '../3._brand-pe_main_dashboard/code.html';
+                    const span = heroBtn.querySelector('[data-t="get-started-span"]');
+                    if (span) span.innerText = dashText;
+                }
+            }
+        }
+
+        // Initialize Language
+        const savedLang = localStorage.getItem('lang') || 'en';
+        setLanguage(savedLang);
+        updateSessionUI();
+
+        // Mouse Tracker for Glow
+        const mouseGlow = document.getElementById('mouse-glow');
+        document.addEventListener('mousemove', (e) => {
+            const x = e.clientX;
+            const y = e.clientY;
+            mouseGlow.style.left = x + 'px';
+            mouseGlow.style.top = y + 'px';
+        });
+
+        // Click Pulse Effect
+        document.addEventListener('mousedown', () => {
+            mouseGlow.style.transform = 'translate(-50%, -50%) scale(1.3)';
+            mouseGlow.style.background = 'radial-gradient(circle, rgba(255, 107, 0, 0.25) 0%, transparent 70%)';
+        });
+
+        document.addEventListener('mouseup', () => {
+            mouseGlow.style.transform = 'translate(-50%, -50%) scale(1)';
+            mouseGlow.style.background = 'radial-gradient(circle, rgba(255, 107, 0, 0.12) 0%, transparent 70%)';
+        });
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+  <title>YouTube Deep-Dive Stats - Brand-pe</title>
+  <link href="https://fonts.googleapis.com" rel="preconnect" />
+  <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect" />
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&amp;display=swap"
+    rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+    rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <script id="tailwind-config">
+    tailwind.config = {
+      darkMode: 'false',
+      theme: {
+        extend: {
+          colors: {
+            "primary": "#ec3713",
+            "primary-dark": "#b02a0e",
+            "background-dark": "#f8fafc", /* Now Light */
+            "card-dark": "#ffffff", /* Now White */
+          },
+          fontFamily: {
+            "display": ["Manrope", "sans-serif"]
+          },
+        },
+      },
+    }
+  </script>
+  <style>
+    .no-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+
+    .no-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+
+    .glass-header {
+      background: rgba(255, 255, 255, 0.9);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    }
+
+    .premium-card {
+      background: rgba(255, 255, 255, 0.03);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .premium-card:hover {
+      border-color: rgba(236, 55, 19, 0.3);
+      transform: translateY(-4px);
+      background: rgba(255, 255, 255, 0.05);
+      box-shadow: 0 20px 40px -20px rgba(0, 0, 0, 0.5);
+    }
+
+    .text-gradient-yt {
+      background: linear-gradient(to right, #ec3713, #ff6b6b);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+
+    @keyframes drawLine {
+      from {
+        stroke-dashoffset: 1000;
+      }
+
+      to {
+        stroke-dashoffset: 0;
+      }
+    }
+
+    .animate-draw {
+      stroke-dasharray: 1000;
+      stroke-dashoffset: 1000;
+      animation: drawLine 2s ease-out forwards;
+    }
+
+    .mesh-bg {
+      background: radial-gradient(at 0% 0%, rgba(236, 55, 19, 0.15) 0%, transparent 50%),
+        radial-gradient(at 100% 100%, rgba(255, 107, 0, 0.1) 0%, transparent 50%);
+    }
+
+    .stat-glow-yt {
+      filter: drop-shadow(0 0 15px rgba(236, 55, 19, 0.5));
+    }
+
+    .video-card-glass {
+      background: linear-gradient(145deg, #ffffff 0%, #f1f5f9 100%);
+      border: 1px solid rgba(0, 0, 0, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      transition: all 0.3s ease;
+    }
+
+    .video-card-glass:hover {
+      background: rgba(255, 255, 255, 0.08);
+      border-color: rgba(255, 255, 255, 0.1);
+    }
+  </style>
+</head>
+
+<body class="bg-background-dark text-slate-200 font-display antialiased mesh-bg min-h-screen pb-32 overflow-x-hidden">
+  <!-- Header -->
+  <header class="fixed top-0 left-0 right-0 z-50 glass-header px-6 pt-12 pb-4 flex items-center justify-between">
+    <button onclick="handleBackNavigation()"
+      class="p-2 rounded-full hover:bg-white/5 active:scale-95 transition-all text-slate-400 hover:text-slate-900">
+      <span class="material-icons-round">chevron_left</span>
+    </button>
+    <div class="flex flex-col items-center">
+      <h1 class="text-base font-black tracking-tight text-slate-900">YouTube <span
+          class="text-gradient-yt italic">Studio</span></h1>
+      <span class="text-[9px] font-black uppercase tracking-[0.2em] text-slate-500">Live Pulse</span>
+    </div>
+
+    <div class="relative">
+      <button id="period-btn" onclick="toggleDropdown()"
+        class="flex items-center gap-1.5 px-3 py-1.5 bg-white/5 rounded-full border border-slate-200 text-[10px] font-black uppercase tracking-widest text-slate-300 hover:border-primary/50 transition-colors">
+        <span id="current-period">Last 28 Days</span>
+        <span class="material-icons-round text-sm">expand_more</span>
+      </button>
+      <div id="period-dropdown"
+        class="hidden absolute top-full right-0 mt-2 w-40 bg-card-dark border border-white/5 rounded-2xl shadow-2xl p-2">
+        <button onclick="selectPeriod('Last 7 Days')"
+          class="w-full text-left px-4 py-2.5 text-[10px] font-bold uppercase tracking-widest hover:bg-white/5 rounded-xl transition-colors">Last
+          7 Days</button>
+        <button onclick="selectPeriod('Last 28 Days')"
+          class="w-full text-left px-4 py-2.5 text-[10px] font-bold uppercase tracking-widest hover:bg-white/5 rounded-xl transition-colors">Last
+          28 Days</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="mt-28 px-6 space-y-5 max-w-md mx-auto">
+    <!-- Revenue & Growth Matrix -->
+    <section class="grid grid-cols-2 gap-4">
+      <!-- Revenue Card (Hero) -->
+      <div onclick="openMetricDetail('revenue')"
+        class="col-span-2 premium-card p-5 rounded-[2rem] flex flex-col justify-between h-44 cursor-pointer group bg-gradient-to-br from-primary/10 to-transparent border-primary/20 relative overflow-hidden">
+        <div class="absolute top-0 right-0 w-32 h-32 bg-primary/10 rounded-full blur-[60px] -mr-16 -mt-16"></div>
+        <div class="flex items-center justify-between relative z-10">
+          <div class="flex items-center gap-2.5">
+            <div
+              class="w-10 h-10 rounded-xl bg-primary flex items-center justify-center text-slate-900 shadow-lg shadow-primary/20">
+              <span class="material-symbols-outlined text-xl">payments</span>
+            </div>
+            <div>
+              <span class="text-[9px] font-black uppercase tracking-[0.2em] text-slate-500">Estimated Revenue</span>
+              <div class="flex items-center gap-2 mt-0.5">
+                <span class="text-[8px] font-black text-green-400 uppercase tracking-widest">+18.4% Surge</span>
+              </div>
+            </div>
+          </div>
+          <div class="flex flex-col items-end">
+            <span class="text-[9px] font-black text-slate-600 uppercase">RPM</span>
+            <span class="text-xs font-black text-slate-900">₹520.4</span>
+          </div>
+        </div>
+        <div class="flex items-end justify-between relative z-10">
+          <div>
+            <h3 class="text-4xl font-black text-slate-900 tracking-tighter stat-glow-yt leading-none">₹1,42,800</h3>
+            <p class="text-[9px] font-bold text-slate-500 uppercase tracking-widest mt-1.5">Cycle projection: ₹2.1L</p>
+          </div>
+          <!-- High-Density Sparkline -->
+          <div class="w-32 h-14 opacity-60 group-hover:opacity-100 transition-opacity">
+            <svg class="w-full h-full" viewBox="0 0 100 40" preserveAspectRatio="none">
+              <path
+                d="M0,38 L5,35 L10,37 L15,32 L20,34 L25,30 L30,33 L35,25 L40,28 L45,20 L50,23 L55,15 L60,18 L65,12 L70,15 L75,8 L80,12 L85,5 L90,10 L95,2 L100,5"
+                fill="none" stroke="#ec3713" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+              <path
+                d="M0,38 L5,35 L10,37 L15,32 L20,34 L25,30 L30,33 L35,25 L40,28 L45,20 L50,23 L55,15 L60,18 L65,12 L70,15 L75,8 L80,12 L85,5 L90,10 L95,2 L100,5 L100,40 L0,40 Z"
+                fill="url(#revGradient)" opacity="0.15" />
+              <defs>
+                <linearGradient id="revGradient" x1="0" x2="0" y1="0" y2="1">
+                  <stop offset="0%" stop-color="#ec3713" />
+                  <stop offset="100%" stop-color="transparent" />
+                </linearGradient>
+              </defs>
+            </svg>
+          </div>
+        </div>
+      </div>
+
+      <!-- Metric 1: Subscribers -->
+      <div onclick="openMetricDetail('subscribers')"
+        class="premium-card p-5 rounded-[2rem] flex flex-col justify-between h-40 cursor-pointer group">
+        <div class="flex items-center justify-between">
+          <div class="w-9 h-9 rounded-xl bg-orange-500/10 flex items-center justify-center text-orange-400">
+            <span class="material-symbols-outlined text-xl">person_add</span>
+          </div>
+          <span
+            class="material-icons-round text-slate-700 text-sm group-hover:text-orange-400 transition-colors">arrow_outward</span>
+        </div>
+        <div>
+          <span class="text-[8px] font-black uppercase tracking-widest text-slate-500">Sub Flow</span>
+          <h3 class="text-2xl font-black text-slate-900 tracking-tighter mt-1">+12,410</h3>
+          <p class="text-[9px] font-bold text-green-400 mt-0.5 uppercase tracking-widest">Velocity: High</p>
+        </div>
+      </div>
+
+      <!-- Metric 2: Engagement Velocity -->
+      <div onclick="openMetricDetail('engagement')"
+        class="premium-card p-5 rounded-[2rem] flex flex-col justify-between h-40 cursor-pointer group">
+        <div class="flex items-center justify-between">
+          <div class="w-9 h-9 rounded-xl bg-blue-500/10 flex items-center justify-center text-blue-400">
+            <span class="material-symbols-outlined text-xl">speed</span>
+          </div>
+          <span
+            class="material-icons-round text-slate-700 text-sm group-hover:text-blue-400 transition-colors">arrow_outward</span>
+        </div>
+        <div>
+          <span class="text-[8px] font-black uppercase tracking-widest text-slate-500">Engage Pulse</span>
+          <h3 class="text-2xl font-black text-slate-900 tracking-tighter mt-1">18.4%</h3>
+          <p class="text-[9px] font-bold text-slate-500 mt-0.5 uppercase tracking-widest">Avg Pulse</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Real-time Video Performance Surge -->
+    <section class="premium-card p-5 rounded-[2.5rem]">
+      <div class="flex justify-between items-center mb-5">
+        <div>
+          <h2 class="text-[9px] font-black uppercase tracking-[0.2em] text-slate-500">Real-time Performance</h2>
+          <p class="text-base font-black text-slate-900 tracking-tight mt-0.5">Trending Now</p>
+        </div>
+        <div class="flex items-center gap-2.5 bg-red-500/10 px-3 py-1.5 rounded-xl border border-red-500/20">
+          <div class="w-1.5 h-1.5 bg-red-500 rounded-full animate-ping"></div>
+          <span class="text-[10px] font-black text-red-500 uppercase tracking-widest">2,410 Watching</span>
+        </div>
+      </div>
+      <div class="space-y-4">
+        <div class="video-card-glass p-4 rounded-3xl flex items-center gap-5 group cursor-pointer">
+          <div
+            class="w-24 h-14 bg-slate-900 rounded-xl flex-shrink-0 relative overflow-hidden ring-1 ring-white/5 shadow-2xl">
+            <div class="absolute inset-x-0 bottom-0 h-1 bg-primary" style="width: 75%"></div>
+            <div
+              class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity bg-black/40">
+              <span class="material-icons-round text-slate-900">play_circle_filled</span>
+            </div>
+          </div>
+          <div class="flex-1 min-w-0">
+            <h4 class="text-xs font-black text-slate-900 uppercase tracking-tight truncate leading-tight">Mastering AI
+              Automation 2026</h4>
+            <div class="flex items-center gap-3 mt-2">
+              <div class="flex items-center gap-1">
+                <span class="material-icons-round text-[10px] text-green-400">trending_up</span>
+                <span class="text-[9px] font-black text-green-400 uppercase">840/hr</span>
+              </div>
+              <span class="text-[9px] font-bold text-slate-600 uppercase tracking-widest">Viral Velocity</span>
+            </div>
+          </div>
+        </div>
+        <div class="video-card-glass p-4 rounded-3xl flex items-center gap-5 group cursor-pointer">
+          <div
+            class="w-24 h-14 bg-slate-900 rounded-xl flex-shrink-0 relative overflow-hidden ring-1 ring-white/5 shadow-2xl">
+            <div class="absolute inset-x-0 bottom-0 h-1 bg-blue-500" style="width: 40%"></div>
+            <div
+              class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity bg-black/40">
+              <span class="material-icons-round text-slate-900">play_circle_filled</span>
+            </div>
+          </div>
+          <div class="flex-1 min-w-0">
+            <h4 class="text-xs font-black text-slate-900 uppercase tracking-tight truncate leading-tight">Secret Growth
+              Hacks
+              for Creators</h4>
+            <div class="flex items-center gap-3 mt-2">
+              <div class="flex items-center gap-1">
+                <span class="material-icons-round text-[10px] text-slate-500">remove_red_eye</span>
+                <span class="text-[9px] font-black text-slate-500 uppercase">420/hr</span>
+              </div>
+              <span class="text-[9px] font-bold text-slate-600 uppercase tracking-widest">Steady Flow</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Heat Retention & Vector Analysis -->
+    <section class="premium-card p-6 rounded-[2.5rem] relative overflow-hidden">
+      <div class="absolute top-0 right-0 w-48 h-48 bg-primary/5 rounded-full blur-[80px] -mr-24 -mt-24"></div>
+      <div class="flex justify-between items-center mb-8 relative z-10">
+        <div>
+          <h2 class="text-[9px] font-black uppercase tracking-[0.2em] text-slate-500">Retention Intelligence</h2>
+          <p class="text-base font-black text-slate-900 tracking-tight mt-0.5">Audience Heat Analysis</p>
+        </div>
+        <div class="bg-white/5 border border-slate-200 px-3 py-1.5 rounded-xl flex flex-col items-center">
+          <span class="text-xs font-black text-primary">8.2 / 10</span>
+          <span class="text-[7px] font-bold text-slate-600 uppercase">Retention Score</span>
+        </div>
+      </div>
+      <div class="relative h-44 w-full group">
+        <svg class="absolute inset-0 w-full h-full pt-6 pb-4" preserveAspectRatio="none" viewBox="0 0 100 50">
+          <defs>
+            <linearGradient id="vectorGradient" x1="0" x2="0" y1="0" y2="1">
+              <stop offset="0%" stop-color="#ec3713" stop-opacity="0.4" />
+              <stop offset="100%" stop-color="#ec3713" stop-opacity="0" />
+            </linearGradient>
+          </defs>
+          <path
+            d="M0,45 L5,42 L10,44 L15,38 L20,40 L25,35 L30,38 L35,28 L40,32 L45,22 L50,26 L55,18 L60,22 L65,15 L70,20 L75,10 L80,16 L85,8 L90,14 L95,4 L100,8 L100,50 L0,50 Z"
+            fill="url(#vectorGradient)" />
+          <path class="animate-draw"
+            d="M0,45 L5,42 L10,44 L15,38 L20,40 L25,35 L30,38 L35,28 L40,32 L45,22 L50,26 L55,18 L60,22 L65,15 L70,20 L75,10 L80,16 L85,8 L90,14 L95,4 L100,8"
+            fill="none" stroke="#ec3713" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+          <circle cx="60" cy="22" fill="#ec3713" r="4" class="stat-glow-yt cursor-pointer" />
+        </svg>
+        <!-- Data Tooltip Logic (Visual) -->
+        <div
+          class="absolute top-10 left-[58%] -translate-x-1/2 bg-primary text-slate-900 text-[8px] font-black py-1 px-2 rounded-lg shadow-2xl shadow-primary/40 pointer-events-none group-hover:scale-110 transition-transform">
+          VIRAL HOOK
+        </div>
+      </div>
+      <div class="flex justify-between mt-4 text-[9px] font-black text-slate-700 uppercase tracking-[0.2em] px-1">
+        <span>START</span><span>BRIDGE</span><span>DROP</span><span>FINISH</span>
+      </div>
+    </section>
+
+    <!-- Geographic & Discovery Matrix -->
+    <section class="grid grid-cols-2 gap-4">
+      <!-- Discovery Source -->
+      <div class="premium-card p-5 rounded-[2.5rem] col-span-2">
+        <h2 class="text-[9px] font-black uppercase tracking-[0.2em] text-slate-500 mb-6">Channel Discovery Flow</h2>
+        <div class="space-y-6">
+          <div>
+            <div class="flex justify-between items-end mb-2.5">
+              <span class="text-[11px] font-black uppercase tracking-tight text-slate-900">Suggested Video <span
+                  class="text-primary ml-2 italic text-[8px] tracking-widest">58.4%</span></span>
+              <span class="text-[8px] font-bold text-slate-500 uppercase tracking-widest">1.4M Reach</span>
+            </div>
+            <div class="h-1.5 w-full bg-white/5 rounded-full overflow-hidden p-[1px]">
+              <div class="h-full bg-primary rounded-full shadow-[0_0_15px_rgba(236,55,19,0.6)]" style="width: 58.4%">
+              </div>
+            </div>
+          </div>
+          <div>
+            <div class="flex justify-between items-end mb-2.5">
+              <span class="text-[11px] font-black uppercase tracking-tight text-slate-900">Browse Features <span
+                  class="text-blue-400 ml-2 italic text-[8px] tracking-widest">32.1%</span></span>
+              <span class="text-[8px] font-bold text-slate-500 uppercase tracking-widest">780K Reach</span>
+            </div>
+            <div class="h-1.5 w-full bg-white/5 rounded-full overflow-hidden p-[1px]">
+              <div class="h-full bg-blue-500 rounded-full shadow-[0_0_15px_rgba(59,130,246,0.5)]" style="width: 32.1%">
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Geo Card 1 -->
+      <div
+        class="premium-card p-5 rounded-[2.5rem] flex flex-col justify-center items-center text-center gap-1.5 border-white/5">
+        <span class="text-[8px] font-black uppercase tracking-widest text-slate-600">Primary Core</span>
+        <div class="flex items-center gap-2">
+          <span class="text-xl font-black text-slate-900 tracking-widest">USA</span>
+          <div class="w-1.5 h-1.5 bg-green-400 rounded-full animate-pulse shadow-[0_0_10px_rgba(74,222,128,0.5)]"></div>
+        </div>
+        <span class="text-[9px] font-black text-green-400">42% REACH</span>
+      </div>
+      <!-- Geo Card 2 -->
+      <div
+        class="premium-card p-5 rounded-[2.5rem] flex flex-col justify-center items-center text-center gap-1.5 border-white/5">
+        <span class="text-[8px] font-black uppercase tracking-widest text-slate-600">Secondary Hub</span>
+        <div class="flex items-center gap-2">
+          <span class="text-xl font-black text-slate-900 tracking-widest">INDIA</span>
+        </div>
+        <span class="text-[9px] font-black text-primary uppercase">31% REACH</span>
+      </div>
+    </section>
+
+    <!-- AI Intelligence Report -->
+    <section
+      class="premium-card p-6 rounded-[3rem] bg-gradient-to-br from-primary/15 via-transparent to-transparent border-primary/20 relative overflow-hidden group">
+      <div
+        class="absolute -bottom-16 -right-16 w-48 h-48 bg-primary/20 rounded-full blur-[80px] opacity-50 group-hover:opacity-100 transition-opacity">
+      </div>
+      <div class="flex items-center justify-between mb-6">
+        <div class="flex items-center gap-3.5">
+          <div class="w-12 h-12 rounded-2xl bg-primary flex items-center justify-center shadow-xl shadow-primary/30">
+            <span class="material-symbols-outlined text-slate-900 text-2xl">auto_awesome</span>
+          </div>
+          <div>
+            <h2 class="text-base font-black uppercase tracking-tight text-slate-900 leading-none">AI Intelligence</h2>
+            <p class="text-[8px] font-bold text-primary uppercase tracking-[0.3em] mt-1.5">Executive Summary</p>
+          </div>
+        </div>
+        <div class="flex flex-col items-end">
+          <div class="flex items-center gap-1.5">
+            <span class="text-lg font-black text-slate-900 tracking-tighter">94<span
+                class="text-xs text-primary">%</span></span>
+          </div>
+          <span class="text-[7px] font-black text-slate-600 uppercase tracking-widest">Trust Index</span>
+        </div>
+      </div>
+      <div class="bg-black/40 rounded-[1.5rem] p-5 border border-slate-200 mb-6 relative z-10">
+        <p class="text-[11px] font-bold text-slate-200 leading-relaxed">
+          Your channel is reaching a <span class="text-primary">critical mass pulse</span> in tech-automation. Global
+          affinity is spiking in <span class="text-slate-900">North America</span>. Recommendation: Focus on "No-Code
+          AI"
+          tutorials for <span class="text-green-400">1.2M potential Reach</span>.
+        </p>
+      </div>
+      <button onclick="navigateWithTransition('../4._ai_post_studio_&_scheduler/code.html')"
+        class="w-full py-4 bg-primary hover:bg-primary-dark text-slate-900 font-black text-[10px] uppercase tracking-[0.3em] rounded-2xl shadow-lg shadow-primary/20 transition-all active:scale-[0.98] flex items-center justify-center gap-3">
+        Draft Recommended Post
+        <span class="material-icons-round text-sm">rocket_launch</span>
+      </button>
+    </section>
+  </main>
+
+  <!-- Bottom Action Bar -->
+  <div class="fixed bottom-6 left-1/2 -translate-x-1/2 w-[85%] max-w-sm z-50">
+    <button onclick="navigateWithTransition('../4._ai_post_studio_&_scheduler/code.html')"
+      class="w-full py-5 bg-white text-black font-black text-[12px] uppercase tracking-[0.2em] rounded-3xl shadow-2xl flex items-center justify-center gap-3 hover:scale-[1.02] active:scale-[0.98] transition-all">
+      <span class="material-icons-round">video_call</span>
+      Create New Video
+    </button>
+  </div>
+
+  <!-- Navigation -->
+  <nav class="fixed bottom-0 left-0 right-0 glass-header pt-4 pb-10 px-8 flex justify-between items-center z-40">
+    <button onclick="navigateWithTransition('../3._brand-pe_main_dashboard/code.html')"
+      class="flex flex-col items-center gap-1.5 text-slate-500 hover:text-slate-900 transition-colors">
+      <span class="material-icons-round text-xl">home</span>
+      <span class="text-[8px] font-black uppercase tracking-widest">Home</span>
+    </button>
+    <button onclick="window.location.href='#'" class="flex flex-col items-center gap-1.5 text-primary">
+      <span class="material-icons-round text-xl">insights</span>
+      <span class="text-[8px] font-black uppercase tracking-widest">Insights</span>
+    </button>
+    <button onclick="navigateWithTransition('../4._ai_post_studio_&_scheduler/code.html')"
+      class="flex flex-col items-center gap-1.5 text-slate-500 hover:text-slate-900 transition-colors">
+      <span class="material-icons-round text-xl">add_box</span>
+      <span class="text-[8px] font-black uppercase tracking-widest">Create</span>
+    </button>
+    <button onclick="navigateWithTransition('../8._settings_&_preferences/code.html')"
+      class="flex flex-col items-center gap-1.5 text-slate-500 hover:text-slate-900 transition-colors">
+      <span class="material-icons-round text-xl">settings</span>
+      <span class="text-[8px] font-black uppercase tracking-widest">Config</span>
+    </button>
+  </nav>
+
+  <!-- Detail Modal -->
+  <div id="metric-modal" class="hidden fixed inset-0 z-[100] flex items-center justify-center p-6">
+    <div onclick="closeMetricModal()" class="absolute inset-0 bg-black/60 backdrop-blur-md"></div>
+    <div class="relative w-full max-w-sm premium-card rounded-[3rem] p-8 shadow-2xl border-slate-200">
+      <div class="flex justify-between items-start mb-8">
+        <div id="modal-header"></div>
+        <button onclick="closeMetricModal()"
+          class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center hover:bg-white/10 transition-colors">
+          <span class="material-icons-round text-slate-400">close</span>
+        </button>
+      </div>
+      <div id="modal-content" class="space-y-6"></div>
+      <button onclick="closeMetricModal()"
+        class="w-full mt-10 py-4 rounded-2xl bg-white/5 border border-slate-200 text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 hover:text-slate-900 transition-colors">
+        Dismiss Insights
+      </button>
+    </div>
+  </div>
+
+  <script>
+    function toggleDropdown() {
+      document.getElementById('period-dropdown').classList.toggle('hidden');
+    }
+
+    function selectPeriod(period) {
+      document.getElementById('current-period').innerText = period;
+      toggleDropdown();
+    }
+
+    // Transition Logic Removed
+    function navigateWithTransition(url) {
+      window.location.href = url;
+    }
+
+    function handleBackNavigation() {
+      window.history.back();
+    }
+
+    const modalMetrics = {
+      'revenue': {
+        title: 'Revenue Snapshot',
+        subtitle: 'Earnings & RPM breakdown',
+        icon: 'payments',
+        color: 'text-primary',
+        bg: 'bg-primary/10',
+        items: [
+          { label: 'Ad Revenue', value: '₹1,12,000', impact: '84%' },
+          { label: 'YT Premium', value: '₹18,400', impact: '12%' },
+          { label: 'Memberships', value: '₹12,400', impact: '4%' },
+          { label: 'Super Chats', value: '₹0', impact: '0%' }
+        ]
+      },
+      'subscribers': {
+        title: 'Sub Flow Pulse',
+        subtitle: 'Growth & Acquisition',
+        icon: 'person_add',
+        color: 'text-orange-400',
+        bg: 'bg-orange-500/10',
+        items: [
+          { label: 'Organic Search', value: '4,210', impact: 'Peak' },
+          { label: 'Suggested Video', value: '6,120', impact: 'Viral' },
+          { label: 'Browse Features', value: '2,080', impact: 'Steady' }
+        ]
+      },
+      'engagement': {
+        title: 'Engage Pulse',
+        subtitle: 'Interaction intensity map',
+        icon: 'speed',
+        color: 'text-blue-400',
+        bg: 'bg-blue-500/10',
+        items: [
+          { label: 'Likes/1K Views', value: '42', impact: 'High' },
+          { label: 'Comment Velocity', value: '12/hr', impact: 'Peak' },
+          { label: 'Community Shares', value: '850', impact: 'Viral' }
+        ]
+      },
+      'ctr': {
+        title: 'Impression CTR',
+        subtitle: 'Thumbnail & Title performance',
+        icon: 'ads_click',
+        color: 'text-blue-400',
+        bg: 'bg-blue-500/10',
+        items: [
+          { label: 'Search CTR', value: '12.4%', impact: 'Peak' },
+          { label: 'Suggested CTR', value: '6.8%', impact: 'Mid' },
+          { label: 'Home Feed CTR', value: '8.2%', impact: 'Stable' }
+        ]
+      }
+    };
+
+    function openMetricDetail(type) {
+      const data = modalMetrics[type];
+      const modal = document.getElementById('metric-modal');
+      const header = document.getElementById('modal-header');
+      const content = document.getElementById('modal-content');
+
+      header.innerHTML = `
+            <div class="flex items-center gap-3 mb-2">
+                <div class="w-10 h-10 rounded-2xl ${data.bg} flex items-center justify-center ${data.color}">
+                    <span class="material-symbols-outlined text-2xl">${data.icon}</span>
+                </div>
+                <h2 class="text-lg font-black uppercase tracking-tight text-slate-900">${data.title}</h2>
+            </div>
+            <p class="text-[9px] font-black text-slate-500 uppercase tracking-[0.2em]">${data.subtitle}</p>
+        `;
+
+      content.innerHTML = data.items.map(item => `
+            <div class="space-y-2">
+                <div class="flex justify-between items-end">
+                    <span class="text-[11px] font-black uppercase tracking-tight text-slate-900">${item.label}</span>
+                    <span class="text-sm font-black ${data.color}">${item.value}</span>
+                </div>
+                <div class="h-1.5 w-full bg-white/5 rounded-full overflow-hidden">
+                    <div class="h-full ${data.bg.replace('/10', '')} rounded-full" style="width: 70%"></div>
+                </div>
+            </div>
+        `).join('');
+
+      modal.classList.remove('hidden');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeMetricModal() {
+      document.getElementById('metric-modal').classList.add('hidden');
+      document.body.style.overflow = '';
+    }
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html class="dark" lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Select Your Plan - Brand-pe</title>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&amp;display=swap"
+        rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet" />
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#FF6B00",
+                        "secondary": "#135bec",
+                        "background-light": "#f6f6f8",
+                        "background-dark": "#121212",
+                    },
+                    fontFamily: {
+                        "display": ["Manrope", "sans-serif"]
+                    },
+                },
+            },
+        }
+    </script>
+    <style>
+        .glass-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .text-gradient-orange {
+            background: linear-gradient(135deg, #FF6B00 0%, #FF9E53 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* Pricing Slider Style */
+        .pricing-toggle {
+            position: relative;
+            display: flex;
+            background: rgba(0, 0, 0, 0.1);
+            padding: 4px;
+            border-radius: 99px;
+            width: 220px;
+            margin: 32px auto 0;
+        }
+
+        .dark .pricing-toggle {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .pricing-slider {
+            position: absolute;
+            top: 4px;
+            bottom: 4px;
+            width: calc(50% - 4px);
+            background: #FF6B00;
+            border-radius: 99px;
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 4px 12px rgba(255, 107, 0, 0.3);
+        }
+
+        .pricing-btn {
+            flex: 1;
+            z-index: 1;
+            padding: 8px 0;
+            font-size: 14px;
+            font-weight: 700;
+            transition: color 0.3s;
+        }
+
+        /* Interactive Grid Background */
+        .grid-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            pointer-events: none;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .grid-pattern {
+            position: absolute;
+            width: 200%;
+            height: 200%;
+            background-image:
+                radial-gradient(circle, rgba(255, 107, 0, 0.08) 1.5px, transparent 1.5px);
+            background-size: 60px 60px;
+            animation: pulse-grid 10s infinite alternate ease-in-out;
+        }
+
+        .mouse-glow {
+            position: absolute;
+            width: 800px;
+            height: 800px;
+            background: radial-gradient(circle, rgba(255, 107, 0, 0.1) 0%, transparent 70%);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            pointer-events: none;
+            transition: opacity 0.5s ease;
+            opacity: 0;
+            mix-blend-mode: screen;
+            z-index: 1;
+        }
+
+        body:hover .mouse-glow {
+            opacity: 1;
+        }
+
+        @keyframes pulse-grid {
+            0% {
+                transform: scale(1);
+                opacity: 0.2;
+            }
+
+            100% {
+                transform: scale(1.05);
+                opacity: 0.5;
+            }
+        }
+    </style>
+</head>
+
+<body
+    class="bg-background-light dark:bg-background-dark font-display text-gray-900 dark:text-gray-100 antialiased min-h-screen py-12 px-6">
+
+    <!-- Background Elements -->
+    <div class="grid-container">
+        <div class="grid-pattern"></div>
+        <div id="mouse-glow" class="mouse-glow"></div>
+    </div>
+
+    <div class="fixed inset-0 overflow-hidden pointer-events-none -z-10">
+        <div class="absolute top-[-10%] right-[-10%] w-[50%] h-[50%] bg-primary/10 rounded-full blur-[120px]"></div>
+        <div class="absolute bottom-[-10%] left-[-10%] w-[60%] h-[60%] bg-blue-500/10 rounded-full blur-[100px]"></div>
+    </div>
+
+    <div class="max-w-7xl mx-auto">
+        <!-- Header -->
+        <div class="text-center mb-16 px-4">
+            <div onclick="window.history.back()"
+                class="inline-flex items-center gap-2 mb-6 opacity-60 hover:opacity-100 cursor-pointer transition-opacity">
+                <span class="material-icons-round text-sm">arrow_back</span>
+                <span data-t="back-home" class="text-sm font-medium">Back to Home</span>
+            </div>
+            <h1 data-t="paywall-title" class="text-3xl md:text-5xl font-extrabold mb-4">Choose Your Growth Path</h1>
+            <p data-t="paywall-desc" class="text-gray-500 dark:text-gray-400 max-w-xl mx-auto text-lg">Select a plan
+                that fits your business
+                stage. Upgrade or downgrade anytime.</p>
+
+            <!-- Pricing Toggle -->
+            <div class="pricing-toggle">
+                <div id="pricing-slider" class="pricing-slider"></div>
+                <button id="btn-monthly" data-t="p-monthly" class="pricing-btn text-white">Monthly</button>
+                <button id="btn-yearly" data-t="p-yearly" class="pricing-btn text-gray-500">Yearly</button>
+            </div>
+        </div>
+
+        <!-- Pricing Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6">
+
+            <!-- Free Plan -->
+            <div
+                class="glass-card rounded-2xl p-6 flex flex-col relative group hover:border-primary/30 transition-colors">
+                <div class="mb-4">
+                    <h3 data-t="free-starter" class="text-xl font-bold mb-2">Free Starter</h3>
+                    <p data-t="free-desc" class="text-sm text-gray-500 dark:text-gray-400 h-10">Perfect for individuals
+                        just getting
+                        started.</p>
+                </div>
+                <div class="mb-6">
+                    <span class="text-4xl font-extrabold">₹0</span>
+                    <span class="text-gray-500 dark:text-gray-400">/forever</span>
+                </div>
+                <button onclick="window.location.href='../2._success_&_connect_channels/code.html?plan=Free+Starter'"
+                    class="w-full py-3 rounded-xl border border-gray-300 dark:border-white/20 hover:border-primary/50 font-bold mb-6 hover:bg-white/5 transition-all">Get
+                    Started</button>
+                <ul class="space-y-3 mb-8 flex-1">
+                    <li class="flex items-start gap-3 text-sm text-gray-600 dark:text-gray-300">
+                        <span class="material-icons-round text-primary text-sm mt-0.5">check</span>
+                        <span>1 Social Account</span>
+                    </li>
+                    <li class="flex items-start gap-3 text-sm text-gray-600 dark:text-gray-300">
+                        <span class="material-icons-round text-primary text-sm mt-0.5">check</span>
+                        <span>Basic Analytics</span>
+                    </li>
+                    <li class="flex items-start gap-3 text-sm text-gray-600 dark:text-gray-300">
+                        <span class="material-icons-round text-primary text-sm mt-0.5">check</span>
+                        <span>5 AI Captions/mo</span>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Standard Plan -->
+            <div class="glass-card rounded-2xl p-6 flex flex-col relative group border border-primary/50 bg-primary/5">
+                <div
+                    class="absolute top-0 right-0 bg-primary text-white text-[10px] font-bold px-3 py-1 rounded-bl-lg rounded-tr-xl">
+                    POPULAR</div>
+                <div class="mb-4">
+                    <h3 class="text-xl font-bold mb-2 text-primary">Pro Growth</h3>
+                    <p class="text-sm text-gray-500 dark:text-gray-400 h-10">For creators & small brands scaling up.</p>
+                </div>
+                <div class="mb-6">
+                    <span class="text-4xl font-extrabold price-monthly">₹999</span>
+                    <span class="text-4xl font-extrabold price-yearly hidden">₹9,999</span>
+                    <span class="text-gray-500 dark:text-gray-400 period">/mo</span>
+                </div>
+                <button onclick="window.location.href='../2._success_&_connect_channels/code.html?plan=Pro+Growth'"
+                    class="w-full py-3 rounded-xl bg-primary hover:bg-orange-600 text-white font-bold mb-6 shadow-lg shadow-primary/25 transition-all transform active:scale-95">Start
+                    14-Day Trial</button>
+                <ul class="space-y-3 mb-8 flex-1">
+                    <li class="flex items-start gap-3 text-sm text-gray-600 dark:text-gray-300">
+                        <span class="material-icons-round text-primary text-sm mt-0.5">check</span>
+                        <span>5 Social Accounts</span>
+                    </li>
+                    <li class="flex items-start gap-3 text-sm text-gray-600 dark:text-gray-300">
+                        <span class="material-icons-round text-primary text-sm mt-0.5">check</span>
+                        <span>Unlimited AI Captions</span>
+                    </li>
+                    <li class="flex items-start gap-3 text-sm text-gray-600 dark:text-gray-300">
+                        <span class="material-icons-round text-primary text-sm mt-0.5">check</span>
+                        <span>Advanced Analytics</span>
+                    </li>
+                    <li class="flex items-start gap-3 text-sm text-gray-600 dark:text-gray-300">
+                        <span class="material-icons-round text-primary text-sm mt-0.5">check</span>
+                        <span>Auto-Scheduling</span>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Premium Plan -->
+            <div
+                class="glass-card rounded-2xl p-6 flex flex-col relative group hover:border-primary/30 transition-colors">
+                <div class="mb-4">
+                    <h3 class="text-xl font-bold mb-2">Business Elite</h3>
+                    <p class="text-sm text-gray-500 dark:text-gray-400 h-10">For agencies & established brands.</p>
+                </div>
+                <div class="mb-6">
+                    <span class="text-4xl font-extrabold price-monthly">₹2,499</span>
+                    <span class="text-4xl font-extrabold price-yearly hidden">₹24,999</span>
+                    <span class="text-gray-500 dark:text-gray-400 period">/mo</span>
+                </div>
+                <button onclick="window.location.href='../2._success_&_connect_channels/code.html?plan=Business+Elite'"
+                    class="w-full py-3 rounded-xl border border-gray-300 dark:border-white/20 hover:border-primary/50 font-bold mb-6 hover:bg-white/5 transition-all">Start
+                    14-Day Trial</button>
+                <ul class="space-y-3 mb-8 flex-1">
+                    <li class="flex items-start gap-3 text-sm text-gray-600 dark:text-gray-300">
+                        <span class="material-icons-round text-primary text-sm mt-0.5">check</span>
+                        <span>15 Social Accounts</span>
+                    </li>
+                    <li class="flex items-start gap-3 text-sm text-gray-600 dark:text-gray-300">
+                        <span class="material-icons-round text-primary text-sm mt-0.5">check</span>
+                        <span>Competitor Analysis</span>
+                    </li>
+                    <li class="flex items-start gap-3 text-sm text-gray-600 dark:text-gray-300">
+                        <span class="material-icons-round text-primary text-sm mt-0.5">check</span>
+                        <span>Team Collaboration (3 Users)</span>
+                    </li>
+                    <li class="flex items-start gap-3 text-sm text-gray-600 dark:text-gray-300">
+                        <span class="material-icons-round text-primary text-sm mt-0.5">check</span>
+                        <span>Priority Support</span>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Enterprise Plan -->
+            <div
+                class="glass-card rounded-2xl p-6 flex flex-col relative group hover:border-primary/30 transition-colors bg-white/5 dark:bg-white/5">
+                <div class="mb-4">
+                    <h3 class="text-xl font-bold mb-2">Enterprise</h3>
+                    <p class="text-sm text-gray-500 dark:text-gray-400 h-10">Custom solutions for large organizations.
+                    </p>
+                </div>
+                <div class="mb-6">
+                    <span class="text-4xl font-extrabold">Custom</span>
+                </div>
+                <button onclick="window.location.href='mailto:sales@brand-pe.com'"
+                    class="w-full py-3 rounded-xl border border-gray-300 dark:border-white/20 hover:border-primary/50 font-bold mb-6 hover:bg-white/5 transition-all">Contact
+                    Sales</button>
+                <ul class="space-y-3 mb-8 flex-1">
+                    <li class="flex items-start gap-3 text-sm text-gray-600 dark:text-gray-300">
+                        <span class="material-icons-round text-primary text-sm mt-0.5">check</span>
+                        <span>Unlimited Accounts & Users</span>
+                    </li>
+                    <li class="flex items-start gap-3 text-sm text-gray-600 dark:text-gray-300">
+                        <span class="material-icons-round text-primary text-sm mt-0.5">check</span>
+                        <span>Custom API Access</span>
+                    </li>
+                    <li class="flex items-start gap-3 text-sm text-gray-600 dark:text-gray-300">
+                        <span class="material-icons-round text-primary text-sm mt-0.5">check</span>
+                        <span>Dedicated Account Manager</span>
+                    </li>
+                    <li class="flex items-start gap-3 text-sm text-gray-600 dark:text-gray-300">
+                        <span class="material-icons-round text-primary text-sm mt-0.5">check</span>
+                        <span>SLA & Custom Contracts</span>
+                    </li>
+                </ul>
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        // Theme Logic
+        const html = document.documentElement;
+        const savedTheme = localStorage.getItem('theme');
+        if (savedTheme === 'dark' || (!savedTheme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            html.classList.add('dark');
+        } else {
+            html.classList.remove('dark');
+        }
+
+        // Pricing
+        const btnMonthly = document.getElementById('btn-monthly');
+        const btnYearly = document.getElementById('btn-yearly');
+        const pricingSlider = document.getElementById('pricing-slider');
+
+        function setPricing(mode) {
+            const monthlyPrices = document.querySelectorAll('.price-monthly');
+            const yearlyPrices = document.querySelectorAll('.price-yearly');
+            const periods = document.querySelectorAll('.period');
+
+            if (mode === 'monthly') {
+                if (pricingSlider) pricingSlider.style.transform = 'translateX(0)';
+                btnMonthly.classList.add('text-white');
+                btnMonthly.classList.remove('text-gray-500');
+                btnYearly.classList.add('text-gray-500');
+                btnYearly.classList.remove('text-white');
+
+                monthlyPrices.forEach(el => el.classList.remove('hidden'));
+                yearlyPrices.forEach(el => el.classList.add('hidden'));
+                periods.forEach(el => el.textContent = '/mo');
+            } else {
+                if (pricingSlider) pricingSlider.style.transform = 'translateX(100%)';
+                btnYearly.classList.add('text-white');
+                btnYearly.classList.remove('text-gray-500');
+                btnMonthly.classList.add('text-gray-500');
+                btnMonthly.classList.remove('text-white');
+
+                monthlyPrices.forEach(el => el.classList.add('hidden'));
+                yearlyPrices.forEach(el => el.classList.remove('hidden'));
+                periods.forEach(el => el.textContent = '/yr');
+            }
+        }
+
+        btnMonthly.addEventListener('click', () => setPricing('monthly'));
+        btnYearly.addEventListener('click', () => setPricing('yearly'));
+
+        // Initialize Theme (moved and updated for clarity)
+        // The previous theme logic was already correct for initialization.
+        // This block is redundant if the initial theme logic is kept.
+        // Keeping the original theme logic and adding pricing initialization.
+
+        // Initialize pricing based on default or saved state (if any)
+        setPricing('monthly');
+
+        // --- Translation Engine ---
+        const translations = {
+            'en': {
+                'back-home': 'Back to Home',
+                'paywall-title': 'Choose Your Growth Path',
+                'paywall-desc': 'Select a plan that fits your business stage. Upgrade or downgrade anytime.',
+                'p-monthly': 'Monthly',
+                'p-yearly': 'Yearly',
+                'free-starter': 'Free Starter',
+                'free-desc': 'Perfect for individuals just getting started.',
+                'pro-growth': 'Pro Growth',
+                'pro-desc': 'For creators & small brands scaling up.',
+                'business-elite': 'Business Elite',
+                'business-desc': 'For agencies & established brands.',
+                'enterprise': 'Enterprise',
+                'enterprise-desc': 'Custom solutions for large organizations.',
+                'per-mo': '/mo',
+                'per-yr': '/yr'
+            },
+            'hi': {
+                'back-home': 'होम पर वापस जाएं',
+                'paywall-title': 'अपनी प्रगति का रास्ता चुनें',
+                'paywall-desc': 'एक ऐसी योजना चुनें जो आपके व्यवसाय के चरण के अनुकूल हो। कभी भी अपग्रेड या डाउनग्रेड करें।',
+                'p-monthly': 'मासिक',
+                'p-yearly': 'वार्षिक',
+                'free-starter': 'फ्री स्टार्टर',
+                'free-desc': 'अभी शुरुआत करने वाले व्यक्तियों के लिए बिल्कुल सही।',
+                'pro-growth': 'प्रो ग्रोथ',
+                'pro-desc': 'तेज़ी से बढ़ते क्रिएटर्स और छोटे ब्रांडों के लिए।',
+                'business-elite': 'बिजनेस एलीट',
+                'business-desc': 'एजेंसियों और स्थापित ब्रांडों के लिए।',
+                'enterprise': 'एंटरप्राइज़',
+                'enterprise-desc': 'बड़े संगठनों के लिए कस्टम समाधान।',
+                'per-mo': '/माह',
+                'per-yr': '/वर्ष'
+            }
+        };
+
+        function applyTranslations() {
+            const lang = localStorage.getItem('lang') || 'en';
+            document.querySelectorAll('[data-t]').forEach(el => {
+                const key = el.getAttribute('data-t');
+                if (translations[lang] && translations[lang][key]) {
+                    el.innerHTML = translations[lang][key];
+                }
+            });
+            // Update periods
+            const periods = document.querySelectorAll('.period');
+            periods.forEach(el => {
+                const currentText = el.textContent;
+                if (lang === 'hi') {
+                    if (currentText === '/mo') el.textContent = '/माह';
+                    if (currentText === '/yr') el.textContent = '/वर्ष';
+                } else {
+                    if (currentText === '/माह') el.textContent = '/mo';
+                    if (currentText === '/वर्ष') el.textContent = '/yr';
+                }
+            });
+        }
+
+        applyTranslations();
+
+        // Mouse Tracker for Glow
+        const mouseGlow = document.getElementById('mouse-glow');
+        document.addEventListener('mousemove', (e) => {
+            const x = e.clientX;
+            const y = e.clientY;
+            mouseGlow.style.left = x + 'px';
+            mouseGlow.style.top = y + 'px';
+        });
+
+        // Click Pulse Effect
+        document.addEventListener('mousedown', () => {
+            mouseGlow.style.transform = 'translate(-50%, -50%) scale(1.3)';
+            mouseGlow.style.background = 'radial-gradient(circle, rgba(255, 107, 0, 0.2) 0%, transparent 70%)';
+        });
+
+        document.addEventListener('mouseup', () => {
+            mouseGlow.style.transform = 'translate(-50%, -50%) scale(1)';
+            mouseGlow.style.background = 'radial-gradient(circle, rgba(255, 107, 0, 0.1) 0%, transparent 70%)';
+        });
+    </script>
+</body>
+
+</html>

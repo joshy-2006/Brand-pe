@@ -1,0 +1,644 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+  <title>AI Post Studio &amp; Scheduler</title>
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&amp;display=swap"
+    rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+    rel="stylesheet" />
+  <script id="tailwind-config">
+    tailwind.config = {
+      darkMode: 'false',
+      theme: {
+        extend: {
+          colors: {
+            "primary": "#f48c25",
+            "primary-dark": "#d9771f",
+            "background-light": "#f8fafc",
+            "surface-dark": "#ffffff",
+            "surface-lighter": "#eff6ff",
+          },
+          fontFamily: {
+            "display": ["Manrope", "sans-serif"]
+          },
+          borderRadius: {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "2xl": "1rem",
+            "3xl": "1.5rem",
+            "full": "9999px"
+          },
+          backgroundImage: {
+            'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
+          }
+        },
+      },
+    }
+  </script>
+  <style>
+    /* Custom scrollbar for horizontal scrolling */
+    .hide-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+
+    .hide-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+  </style>
+  <style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+</head>
+
+<body
+  class="bg-slate-50 font-display text-slate-900 overflow-hidden min-h-screen relative font-medium selection:bg-primary/20 selection:text-primary">
+  <!-- Mobile Container -->
+  <div
+    class="max-w-md mx-auto h-[100dvh] flex flex-col relative shadow-2xl bg-white overflow-hidden border-x border-slate-200">
+    <!-- Status Bar Area (Visual only) -->
+    <div class="h-12 w-full flex items-end justify-between px-6 pb-2 text-xs font-medium text-slate-500 z-20">
+      <span>9:41</span>
+      <div class="flex gap-1.5 items-center">
+        <span class="material-icons-round text-sm">signal_cellular_alt</span>
+        <span class="material-icons-round text-sm">wifi</span>
+        <span class="material-icons-round text-sm">battery_full</span>
+      </div>
+    </div>
+    <!-- Top Navigation -->
+    <!-- Top Navigation -->
+    <header
+      class="px-6 pt-8 pb-4 flex items-center justify-between z-20 bg-white/90 backdrop-blur-xl border-b border-slate-100/50 sticky top-0">
+      <button onclick="window.location.href='../3._brand-pe_main_dashboard/code.html'"
+        class="w-10 h-10 rounded-full flex items-center justify-center hover:bg-slate-50 transition-all text-slate-400 hover:text-slate-900 active:scale-95">
+        <span class="material-icons-round text-xl">close</span>
+      </button>
+
+      <div class="flex bg-slate-100/80 p-1 rounded-full ring-1 ring-slate-200/50">
+        <button id="studio-tab" onclick="switchView('studio')"
+          class="flex items-center gap-2 px-6 py-2.5 rounded-full text-[11px] font-black uppercase tracking-widest transition-all bg-white text-primary shadow-[0_2px_10px_-4px_rgba(244,140,37,0.4)] ring-1 ring-black/5">
+          <span class="material-icons-round text-lg">add_circle</span>
+        </button>
+        <button id="planner-tab" onclick="switchView('planner')"
+          class="flex items-center gap-2 px-6 py-2.5 rounded-full text-[11px] font-black uppercase tracking-widest transition-all text-slate-500 hover:text-slate-700">
+          <span class="material-icons-round text-lg">calendar_month</span>
+          <span class="hidden sm:inline">Schedule</span>
+        </button>
+      </div>
+
+      <button
+        class="w-10 h-10 rounded-full flex items-center justify-center hover:bg-slate-50 transition-all text-slate-400 hover:text-slate-900 active:scale-95">
+        <span class="material-icons-round text-xl">settings</span>
+      </button>
+    </header>
+    <!-- Main Scrollable Content -->
+    <main id="view-studio" class="flex-1 px-6 pt-6 pb-24 space-y-6 overflow-y-auto no-scrollbar scroll-smooth">
+
+      <!-- 1. Post Content & AI Caption (Small) -->
+      <section
+        class="bg-white rounded-[2rem] p-5 shadow-[0_8px_30px_-10px_rgba(0,0,0,0.05)] border border-slate-100 group focus-within:border-primary/30 transition-colors">
+        <div class="flex justify-between items-start mb-3">
+          <h3 class="text-xs font-black text-slate-400 uppercase tracking-widest">Post Content</h3>
+          <button
+            class="flex items-center gap-1.5 px-3 py-1 bg-primary/5 hover:bg-primary/10 rounded-full border border-primary/10 text-[10px] font-bold text-primary transition-all active:scale-95">
+            <span class="material-icons-round text-xs">auto_awesome</span>
+            AI Caption
+          </button>
+        </div>
+
+        <div class="flex gap-4">
+          <!-- Minimal Media Input -->
+          <div class="shrink-0">
+            <div
+              class="w-20 h-20 rounded-2xl bg-slate-50 border border-dashed border-slate-200 flex flex-col items-center justify-center text-slate-400 hover:text-primary hover:border-primary hover:bg-primary/5 transition-all cursor-pointer">
+              <span class="material-icons-round text-2xl">add_photo_alternate</span>
+            </div>
+          </div>
+
+          <textarea
+            class="w-full bg-transparent text-sm font-medium text-slate-700 placeholder:text-slate-300 border-none focus:ring-0 resize-none p-0 h-20 leading-relaxed"
+            placeholder="Write your caption here..."></textarea>
+        </div>
+      </section>
+
+      <!-- 2. Suggested Hashtags -->
+      <section class="space-y-3">
+        <h3 class="text-xs font-black text-slate-400 uppercase tracking-widest px-2">Trending Hashtags</h3>
+        <div class="flex flex-wrap gap-2">
+          <button
+            class="px-3 py-1.5 rounded-full bg-white border border-slate-100 text-[10px] font-bold text-slate-500 hover:border-primary/50 hover:text-primary transition-all shadow-sm">#SummerVibes</button>
+          <button
+            class="px-3 py-1.5 rounded-full bg-white border border-slate-100 text-[10px] font-bold text-slate-500 hover:border-primary/50 hover:text-primary transition-all shadow-sm">#OOTD</button>
+          <button
+            class="px-3 py-1.5 rounded-full bg-white border border-slate-100 text-[10px] font-bold text-slate-500 hover:border-primary/50 hover:text-primary transition-all shadow-sm">#FashionTrends</button>
+          <button
+            class="px-3 py-1.5 rounded-full bg-white border border-slate-100 text-[10px] font-bold text-slate-500 hover:border-primary/50 hover:text-primary transition-all shadow-sm">#NewArrivals</button>
+        </div>
+      </section>
+
+      <!-- 3. Trending Audio -->
+      <section
+        class="bg-gradient-to-br from-indigo-500 to-purple-600 rounded-[2rem] p-5 text-white shadow-lg shadow-indigo-200 relative overflow-hidden">
+        <div class="absolute top-0 right-0 p-4 opacity-10">
+          <span class="material-icons-round text-6xl">music_note</span>
+        </div>
+        <h3 class="text-[10px] font-black uppercase tracking-widest text-white/60 mb-4">Recommended Audio</h3>
+        <div class="space-y-3 relative z-10">
+          <div
+            class="flex items-center justify-between bg-white/10 backdrop-blur-md rounded-xl p-3 border border-white/10 hover:bg-white/20 transition-all cursor-pointer">
+            <div class="flex items-center gap-3">
+              <div class="w-8 h-8 rounded-lg bg-white/20 flex items-center justify-center">
+                <span class="material-icons-round text-sm">play_arrow</span>
+              </div>
+              <div>
+                <p class="text-xs font-bold">Dreamscape</p>
+                <p class="text-[9px] text-white/60">Trending • 120k Reels</p>
+              </div>
+            </div>
+            <span class="material-icons-round text-sm">add_circle_outline</span>
+          </div>
+          <div
+            class="flex items-center justify-between bg-white/10 backdrop-blur-md rounded-xl p-3 border border-white/10 hover:bg-white/20 transition-all cursor-pointer">
+            <div class="flex items-center gap-3">
+              <div class="w-8 h-8 rounded-lg bg-white/20 flex items-center justify-center">
+                <span class="material-icons-round text-sm">play_arrow</span>
+              </div>
+              <div>
+                <p class="text-xs font-bold">City Lights</p>
+                <p class="text-[9px] text-white/60">Viral • 850k Reels</p>
+              </div>
+            </div>
+            <span class="material-icons-round text-sm">add_circle_outline</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- 4. Top Comments (First Comment) -->
+      <section class="bg-white rounded-[2rem] p-5 shadow-[0_4px_20px_-5px_rgba(0,0,0,0.03)] border border-slate-100">
+        <div class="flex items-center gap-2 mb-3">
+          <span class="material-icons-round text-primary text-sm">chat_bubble</span>
+          <h3 class="text-xs font-black text-slate-900 uppercase tracking-widest">First Comment Strategy</h3>
+        </div>
+        <div class="relative">
+          <textarea
+            class="w-full bg-slate-50 rounded-xl p-3 text-xs font-medium text-slate-700 border-none focus:ring-1 focus:ring-primary/20 resize-none h-20 placeholder:text-slate-400"
+            placeholder="Type a question to boost engagement..."></textarea>
+          <button
+            class="absolute bottom-2 right-2 p-1.5 bg-white rounded-lg text-primary shadow-sm hover:scale-105 transition-transform">
+            <span class="material-icons-round text-xs">auto_fix_normal</span>
+          </button>
+        </div>
+      </section>
+
+      <!-- 5. Basic SEO Tips -->
+      <section class="bg-white rounded-[2rem] p-5 shadow-[0_4px_20px_-5px_rgba(0,0,0,0.03)] border border-slate-100">
+        <h3 class="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-4">SEO Optimization Score</h3>
+        <div class="flex items-center gap-4 mb-5">
+          <div class="relative w-12 h-12 flex-shrink-0">
+            <svg class="w-full h-full transform -rotate-90">
+              <circle cx="24" cy="24" r="20" stroke="currentColor" stroke-width="4" fill="transparent"
+                class="text-slate-100" />
+              <circle cx="24" cy="24" r="20" stroke="currentColor" stroke-width="4" fill="transparent"
+                class="text-green-500" stroke-dasharray="125.6" stroke-dashoffset="30" />
+            </svg>
+            <span class="absolute inset-0 flex items-center justify-center text-xs font-black text-slate-900">75</span>
+          </div>
+          <div class="space-y-2 flex-1">
+            <div class="flex items-center gap-2 text-[10px] font-bold text-slate-600">
+              <span class="material-icons-round text-xs text-green-500">check_circle</span>
+              Caption length optimal
+            </div>
+            <div class="flex items-center gap-2 text-[10px] font-bold text-slate-600">
+              <span class="material-icons-round text-xs text-green-500">check_circle</span>
+              Keywords included
+            </div>
+            <div class="flex items-center gap-2 text-[10px] font-bold text-slate-600">
+              <span class="material-icons-round text-xs text-orange-400">warning</span>
+              Add Alt Text to image
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 6. Schedule Post (Bottom Action) -->
+      <div class="h-24"></div> <!-- Spacer -->
+    </main>
+
+    <!-- Bottom Floating Action Bar for Studio -->
+    <div id="studio-fab"
+      class="fixed bottom-0 left-0 right-0 bg-white/80 backdrop-blur-xl border-t border-slate-100 p-5 z-40 max-w-md mx-auto">
+      <button
+        class="w-full py-4 bg-primary hover:bg-primary-dark text-white rounded-2xl shadow-lg shadow-primary/25 font-black uppercase tracking-[0.15em] text-xs transition-all active:scale-[0.98] flex items-center justify-center gap-2">
+        Schedule Post
+        <span class="material-icons-round text-sm">event</span>
+      </button>
+    </div>
+    <!-- Bottom Action Area -->
+  </div>
+
+  <!-- Planner View Content (Schedule Tab) -->
+  <main id="view-planner" class="hidden flex-1 px-6 pt-6 space-y-6 overflow-y-auto no-scrollbar pb-24">
+
+    <!-- 1. Planner Header & Quick Stats -->
+    <div class="space-y-4">
+      <div class="flex items-center justify-between">
+        <div>
+          <h2 class="text-xl font-black text-slate-900 tracking-tight">February 2026</h2>
+          <p class="text-xs font-semibold text-slate-400">Content Overview</p>
+        </div>
+        <button
+          class="p-2 bg-white rounded-xl border border-slate-100 shadow-sm text-slate-400 hover:text-primary transition-colors">
+          <span class="material-icons-round text-xl">tune</span>
+        </button>
+      </div>
+
+      <!-- Quick Metrics Grid -->
+      <div class="grid grid-cols-2 gap-3">
+        <div
+          class="bg-white p-4 rounded-2xl border border-slate-100 shadow-sm flex flex-col justify-between h-24 relative overflow-hidden group">
+          <div class="absolute right-0 top-0 p-3 opacity-10 group-hover:opacity-20 transition-opacity">
+            <span class="material-icons-round text-4xl text-primary">schedule</span>
+          </div>
+          <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Scheduled</span>
+          <div>
+            <span class="text-2xl font-black text-slate-900">12</span>
+            <span class="text-[10px] font-bold text-slate-400 ml-1">Posts</span>
+          </div>
+        </div>
+        <div
+          class="bg-white p-4 rounded-2xl border border-slate-100 shadow-sm flex flex-col justify-between h-24 relative overflow-hidden group">
+          <div class="absolute right-0 top-0 p-3 opacity-10 group-hover:opacity-20 transition-opacity">
+            <span class="material-icons-round text-4xl text-blue-500">insights</span>
+          </div>
+          <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Forecast</span>
+          <div>
+            <span class="text-2xl font-black text-slate-900">+45%</span>
+            <span class="text-[10px] font-bold text-green-500 ml-1">Reach</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2. Interactive Calendar -->
+    <section
+      class="bg-white rounded-[2rem] p-6 shadow-[0_8px_30px_-10px_rgba(0,0,0,0.05)] border border-slate-100 relative z-10">
+      <div class="flex items-center justify-between mb-6">
+        <span class="text-xs font-black text-slate-400 uppercase tracking-widest">Calendar</span>
+        <div class="flex gap-1">
+          <button
+            class="w-6 h-6 flex items-center justify-center rounded-full hover:bg-slate-50 text-slate-400 hover:text-slate-900"><span
+              class="material-icons-round text-sm">chevron_left</span></button>
+          <button
+            class="w-6 h-6 flex items-center justify-center rounded-full hover:bg-slate-50 text-slate-400 hover:text-slate-900"><span
+              class="material-icons-round text-sm">chevron_right</span></button>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-7 gap-y-6 text-center">
+        <!-- Weekdays -->
+        <span class="text-[9px] font-bold text-slate-300 uppercase">M</span>
+        <span class="text-[9px] font-bold text-slate-300 uppercase">T</span>
+        <span class="text-[9px] font-bold text-slate-300 uppercase">W</span>
+        <span class="text-[9px] font-bold text-slate-300 uppercase">T</span>
+        <span class="text-[9px] font-bold text-slate-300 uppercase">F</span>
+        <span class="text-[9px] font-bold text-slate-300 uppercase">S</span>
+        <span class="text-[9px] font-bold text-slate-300 uppercase">S</span>
+
+        <!-- Calendar Days -->
+        <!-- Past/Empty -->
+        <div class="flex justify-center"><span class="text-xs text-slate-200 font-medium">29</span></div>
+        <div class="flex justify-center"><span class="text-xs text-slate-200 font-medium">30</span></div>
+        <div class="flex justify-center"><span class="text-xs text-slate-200 font-medium">31</span></div>
+
+        <!-- Active Month -->
+        <div class="flex justify-center"><span class="text-xs text-slate-400 font-bold">1</span></div>
+
+        <!-- Day with Post (Instagram) -->
+        <div class="flex flex-col items-center gap-1 group cursor-pointer relative">
+          <span class="text-xs font-bold text-slate-700 group-hover:text-primary transition-colors">2</span>
+          <div class="w-1.5 h-1.5 rounded-full bg-gradient-to-tr from-yellow-400 to-red-500 shadow-sm"></div>
+        </div>
+
+        <div class="flex justify-center"><span class="text-xs text-slate-400 font-bold">3</span></div>
+        <div class="flex justify-center"><span class="text-xs text-slate-400 font-bold">4</span></div>
+        <div class="flex justify-center"><span class="text-xs text-slate-400 font-bold">5</span></div>
+
+        <!-- Day with Post (LinkedIn) -->
+        <div class="flex flex-col items-center gap-1 group cursor-pointer relative">
+          <span class="text-xs font-bold text-slate-700 group-hover:text-blue-600 transition-colors">6</span>
+          <div class="w-1.5 h-1.5 rounded-full bg-blue-600 shadow-sm"></div>
+        </div>
+
+        <div class="flex justify-center"><span class="text-xs text-slate-400 font-bold">7</span></div>
+        <div class="flex justify-center"><span class="text-xs text-slate-400 font-bold">8</span></div>
+
+        <!-- Today -->
+        <div class="relative flex flex-col items-center justify-center cursor-pointer group">
+          <div
+            class="w-9 h-9 rounded-xl bg-primary text-white flex items-center justify-center shadow-lg shadow-primary/30 z-10 group-hover:scale-110 transition-transform">
+            <span class="text-xs font-black">9</span>
+          </div>
+          <!-- Indicator -->
+          <div class="absolute -bottom-1 w-1 h-1 bg-white rounded-full z-20"></div>
+        </div>
+
+        <div class="flex justify-center"><span class="text-xs text-slate-400 font-bold">10</span></div>
+
+        <!-- Day with Multiple Posts -->
+        <div class="flex flex-col items-center gap-1 group cursor-pointer relative">
+          <span class="text-xs font-bold text-slate-700">11</span>
+          <div class="flex gap-0.5">
+            <div class="w-1.5 h-1.5 rounded-full bg-red-500"></div>
+            <div class="w-1.5 h-1.5 rounded-full bg-blue-500"></div>
+          </div>
+        </div>
+
+        <div class="flex justify-center"><span class="text-xs text-slate-400 font-bold">12</span></div>
+        <div class="flex justify-center"><span class="text-xs text-slate-400 font-bold">13</span></div>
+        <div class="flex justify-center"><span class="text-xs text-slate-400 font-bold">14</span></div>
+        <div class="flex justify-center"><span class="text-xs text-slate-400 font-bold">15</span></div>
+        <div class="flex justify-center"><span class="text-xs text-slate-400 font-bold">16</span></div>
+        <div class="flex justify-center"><span class="text-xs text-slate-400 font-bold">17</span></div>
+        <div class="flex justify-center"><span class="text-xs text-slate-400 font-bold">18</span></div>
+      </div>
+    </section>
+
+    <!-- 3. Engagement Matrix (Metrics) -->
+    <section class="space-y-4">
+      <div class="flex items-center justify-between px-1">
+        <h3 class="text-xs font-black uppercase tracking-widest text-slate-400">Activity Heatmap</h3>
+        <span
+          class="text-[10px] text-green-600 font-bold bg-green-50 px-2.5 py-1 rounded-lg border border-green-100 flex items-center gap-1">
+          <span class="material-icons-round text-[10px]">trending_up</span> Best Time: 6pm
+        </span>
+      </div>
+      <div
+        class="bg-white rounded-[2rem] p-5 shadow-[0_4px_20px_-5px_rgba(0,0,0,0.03)] border border-slate-100 overflow-hidden">
+        <!-- Heatmap Legend -->
+        <div class="flex justify-end gap-3 mb-4 text-[9px] font-bold text-slate-400 uppercase tracking-wide">
+          <div class="flex items-center gap-1">
+            <div class="w-2 h-2 rounded bg-primary/10"></div> Low
+          </div>
+          <div class="flex items-center gap-1">
+            <div class="w-2 h-2 rounded bg-primary/40"></div> Med
+          </div>
+          <div class="flex items-center gap-1">
+            <div class="w-2 h-2 rounded bg-primary"></div> High
+          </div>
+        </div>
+
+        <!-- Matrix Grid -->
+        <div class="relative overflow-x-auto pb-2 hide-scrollbar">
+          <div class="min-w-[300px] grid grid-cols-[30px_1fr] gap-2">
+            <!-- Y-Axis Labels -->
+            <div class="flex flex-col gap-2 pt-6">
+              <span class="h-6 flex items-center text-[9px] font-bold text-slate-400">Mon</span>
+              <span class="h-6 flex items-center text-[9px] font-bold text-slate-400">Tue</span>
+              <span class="h-6 flex items-center text-[9px] font-bold text-slate-400">Wed</span>
+              <span class="h-6 flex items-center text-[9px] font-bold text-slate-400">Thu</span>
+            </div>
+            <!-- Grid -->
+            <div>
+              <!-- X-Axis Labels -->
+              <div class="grid grid-cols-4 gap-1 mb-2 text-center">
+                <span class="text-[9px] font-bold text-slate-300">Morning</span>
+                <span class="text-[9px] font-bold text-slate-300">Noon</span>
+                <span class="text-[9px] font-bold text-slate-300">Evening</span>
+                <span class="text-[9px] font-bold text-slate-300">Night</span>
+              </div>
+              <!-- Rows -->
+              <div class="flex flex-col gap-2">
+                <!-- Mon -->
+                <div class="grid grid-cols-4 gap-1">
+                  <div class="h-6 rounded bg-primary/10"></div>
+                  <div class="h-6 rounded bg-primary/40"></div>
+                  <div class="h-6 rounded bg-primary/20"></div>
+                  <div class="h-6 rounded bg-primary/60"></div>
+                </div>
+                <!-- Tue -->
+                <div class="grid grid-cols-4 gap-1">
+                  <div class="h-6 rounded bg-primary/20"></div>
+                  <div class="h-6 rounded bg-primary/50 relative group cursor-help">
+                    <div
+                      class="absolute -top-6 left-1/2 -translate-x-1/2 bg-slate-800 text-white text-[8px] px-1.5 py-0.5 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap z-20">
+                      2.4% Avg</div>
+                  </div>
+                  <div class="h-6 rounded bg-primary/80 animate-pulse"></div>
+                  <div class="h-6 rounded bg-primary/30"></div>
+                </div>
+                <!-- Wed -->
+                <div class="grid grid-cols-4 gap-1">
+                  <div class="h-6 rounded bg-primary/5"></div>
+                  <div class="h-6 rounded bg-primary/30"></div>
+                  <div class="h-6 rounded bg-primary border border-primary shadow-sm shadow-primary/30"></div>
+                  <div class="h-6 rounded bg-primary/50"></div>
+                </div>
+                <!-- Thu -->
+                <div class="grid grid-cols-4 gap-1">
+                  <div class="h-6 rounded bg-primary/10"></div>
+                  <div class="h-6 rounded bg-primary/20"></div>
+                  <div class="h-6 rounded bg-primary/40"></div>
+                  <div class="h-6 rounded bg-primary/20"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. Upcoming Stack -->
+    <section>
+      <div class="flex items-center justify-between px-1 mb-4">
+        <h3 class="text-xs font-black uppercase tracking-widest text-slate-400">Upcoming</h3>
+        <button class="text-[10px] font-bold text-primary hover:text-primary-dark">View All</button>
+      </div>
+      <div class="space-y-4">
+        <!-- Card 1 -->
+        <div
+          class="bg-white rounded-2xl p-4 flex gap-4 border border-slate-100 shadow-[0_2px_15px_-5px_rgba(0,0,0,0.05)] relative overflow-hidden group">
+          <div class="absolute left-0 top-0 bottom-0 w-1 bg-gradient-to-b from-purple-500 to-pink-500"></div>
+          <div class="w-14 h-14 rounded-xl bg-slate-100 flex-shrink-0 relative overflow-hidden">
+            <img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=150&q=80"
+              class="w-full h-full object-cover opacity-90 group-hover:scale-110 transition-transform duration-500">
+          </div>
+          <div class="flex-1 min-w-0">
+            <div class="flex justify-between items-start mb-1">
+              <div class="flex items-center gap-1.5">
+                <span class="w-4 h-4 rounded-full bg-slate-50 flex items-center justify-center"><i
+                    class="devicon-facebook-plain text-[10px] text-blue-600"></i></span>
+                <!-- Fallback icon -->
+                <span class="text-[9px] font-black uppercase tracking-wide text-slate-400">Instagram</span>
+              </div>
+              <span class="text-[10px] font-bold text-slate-900 bg-slate-50 px-1.5 py-0.5 rounded">10:00 AM</span>
+            </div>
+            <h4 class="text-sm font-bold text-slate-800 truncate">Product Launch Teaser</h4>
+            <p class="text-[10px] text-slate-400 mt-0.5 truncate">Getting ready for the summer waves...</p>
+          </div>
+        </div>
+
+        <!-- Card 2 -->
+        <div
+          class="bg-white rounded-2xl p-4 flex gap-4 border border-slate-100 shadow-[0_2px_15px_-5px_rgba(0,0,0,0.05)] relative overflow-hidden hover:opacity-100 opacity-80 transition-opacity">
+          <div class="absolute left-0 top-0 bottom-0 w-1 bg-blue-600"></div>
+          <div
+            class="w-14 h-14 rounded-xl bg-slate-50 flex-shrink-0 flex items-center justify-center text-slate-400 border border-slate-100">
+            <span class="material-icons-round text-xl">article</span>
+          </div>
+          <div class="flex-1 min-w-0">
+            <div class="flex justify-between items-start mb-1">
+              <span class="text-[9px] font-black uppercase tracking-wide text-slate-400">LinkedIn</span>
+              <span class="text-[10px] font-bold text-slate-900 bg-slate-50 px-1.5 py-0.5 rounded">02:30 PM</span>
+            </div>
+            <h4 class="text-sm font-bold text-slate-800 truncate">Industry Insights Trends</h4>
+            <p class="text-[10px] text-slate-400 mt-0.5 truncate">Analysis of Q4 market moves...</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+  </div>
+  <!-- AI Modal / Bottom Sheet (Hidden by default, shown for visual context in output) -->
+  <!-- In a real app this would toggle. Here I'll make it appear 'docked' or hint at it, 
+         or I can use a details/summary or just absolute positioning to show what it looks like active.
+         I will render it invisible but structure it for the design request "AI Tool Sheet". -->
+  <div class="hidden absolute inset-0 z-50 bg-black/20 backdrop-blur-sm flex items-end justify-center">
+    <div class="w-full max-w-md bg-white rounded-t-[2.5rem] p-8 space-y-6 shadow-2xl animate-slide-up pb-12">
+      <div class="w-12 h-1.5 bg-slate-100 rounded-full mx-auto"></div>
+      <div class="text-center space-y-1">
+        <h3 class="text-xl font-black text-slate-900 tracking-tight">AI Assistant</h3>
+        <p class="text-sm text-slate-500 font-medium">Enhance your post with smart tools</p>
+      </div>
+      <div class="grid gap-3">
+        <button
+          class="flex items-center gap-4 p-4 rounded-2xl bg-slate-50 hover:bg-slate-100 transition-colors border border-slate-100 group text-left">
+          <div
+            class="w-12 h-12 rounded-xl bg-gradient-to-tr from-primary to-orange-400 flex items-center justify-center text-white shadow-lg shadow-primary/20 group-hover:scale-110 transition-transform">
+            <span class="material-icons-round">auto_fix_high</span>
+          </div>
+          <div>
+            <h4 class="font-bold text-slate-900 group-hover:text-primary transition-colors">Generate Caption</h4>
+            <p class="text-xs text-slate-500 font-medium mt-0.5">Create engaging text from keywords</p>
+          </div>
+        </button>
+        <button
+          class="flex items-center gap-4 p-4 rounded-2xl bg-slate-50 hover:bg-slate-100 transition-colors border border-slate-100 group text-left">
+          <div
+            class="w-12 h-12 rounded-xl bg-white border border-slate-200 flex items-center justify-center text-slate-400 group-hover:border-primary/50 group-hover:text-primary transition-colors">
+            <span class="material-icons-round">tag</span>
+          </div>
+          <div>
+            <h4 class="font-bold text-slate-900 group-hover:text-primary transition-colors">Suggest Hashtags</h4>
+            <p class="text-xs text-slate-500 font-medium mt-0.5">Find viral tags for your niche</p>
+          </div>
+        </button>
+      </div>
+    </div>
+  </div>
+  </div>
+  <script>
+    // Theme Logic - Forced Light
+    const html = document.documentElement;
+    html.classList.remove('dark');
+
+    // --- Translation Engine ---
+    const translations = {
+      'en': {
+        'studio-title': 'Post Studio',
+        'save-draft': 'Save Draft',
+        'content-label': 'Content',
+        'write-with-ai': 'Write with AI',
+        'posting-to': 'Posting to',
+        'live-preview': 'Live Preview',
+        'schedule-post': 'Schedule Post',
+        'scheduled-for': 'Scheduled for',
+        'today': 'Today',
+        'edit': 'Edit'
+      },
+      'hi': {
+        'studio-title': 'पोस्ट स्टूडियो',
+        'save-draft': 'ड्राफ्ट सेव करें',
+        'content-label': 'सामग्री',
+        'write-with-ai': 'AI के साथ लिखें',
+        'posting-to': 'पोस्ट किया जा रहा है',
+        'live-preview': 'लाइव प्रीव्यू',
+        'schedule-post': 'पोस्ट शेड्यूल करें',
+        'scheduled-for': 'के लिए शेड्यूल किया गया',
+        'today': 'आज',
+        'edit': 'संपादन'
+      }
+    };
+
+    function applyTranslations() {
+      const params = new URLSearchParams(window.location.search);
+      const view = params.get('view');
+      if (view === 'planner') {
+        switchView('planner');
+      }
+
+      const lang = localStorage.getItem('lang') || 'en';
+      document.querySelectorAll('[data-t]').forEach(el => {
+        const key = el.getAttribute('data-t');
+        if (translations[lang] && translations[lang][key]) {
+          el.innerHTML = translations[lang][key];
+        }
+      });
+
+      // Dynamic Context
+      const username = localStorage.getItem('username') || 'Brand_Official';
+      document.getElementById('studio-brand-name').innerText = username;
+
+      const connectedPlatform = localStorage.getItem('connectedPlatform') || 'Instagram';
+      document.getElementById('studio-platform').innerText = connectedPlatform;
+    }
+
+    function switchView(view) {
+      const studioView = document.getElementById('view-studio');
+      const plannerView = document.getElementById('view-planner');
+      const studioTab = document.getElementById('studio-tab');
+      const plannerTab = document.getElementById('planner-tab');
+      // Ensure element exists before toggling
+      const studioFab = document.getElementById('studio-fab');
+
+      if (view === 'planner') {
+        studioView.classList.add('hidden');
+        // studioFab is NOT hidden, stays visible as per user request
+        plannerView.classList.remove('hidden');
+
+        // Update Tab Styles
+        plannerTab.classList.add('bg-white', 'text-primary', 'shadow-[0_2px_10px_-4px_rgba(244,140,37,0.4)]', 'ring-1', 'ring-slate-200');
+        plannerTab.classList.remove('text-slate-500');
+
+        studioTab.classList.add('text-slate-500');
+        studioTab.classList.remove('bg-white', 'text-primary', 'shadow-[0_2px_10px_-4px_rgba(244,140,37,0.4)]', 'ring-1', 'ring-slate-200');
+      } else {
+        plannerView.classList.add('hidden');
+        studioView.classList.remove('hidden');
+        // studioFab is visible here too
+
+
+        // Update Tab Styles
+        studioTab.classList.add('bg-white', 'text-primary', 'shadow-[0_2px_10px_-4px_rgba(244,140,37,0.4)]', 'ring-1', 'ring-slate-200');
+        studioTab.classList.remove('text-slate-500');
+
+        plannerTab.classList.add('text-slate-500');
+        plannerTab.classList.remove('bg-white', 'text-primary', 'shadow-[0_2px_10px_-4px_rgba(244,140,37,0.4)]', 'ring-1', 'ring-slate-200');
+      }
+    }
+
+    applyTranslations();
+  </script>
+</body>
+
+</html>

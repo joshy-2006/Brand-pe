@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Success &amp; Connect Channels - Brand-pe</title>
+    <!-- Google Fonts: Manrope -->
+    <link href="https://fonts.googleapis.com" rel="preconnect" />
+    <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect" />
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&amp;display=swap"
+        rel="stylesheet" />
+    <!-- Material Icons -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <!-- Tailwind CSS with Plugins -->
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <!-- Tailwind Config -->
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#ec7f13",
+                        "background-light": "#f8f7f6",
+                        "background-dark": "#221910",
+                        "card-dark": "#2C241B", // Slightly lighter than bg for cards
+                        "success": "#10B981", // Emerald 500
+                    },
+                    fontFamily: {
+                        "display": ["Manrope", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "2xl": "1rem",
+                        "3xl": "1.5rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+    <style>
+        /* Custom scrollbar for horizontal scrolling if needed */
+        .hide-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+
+        .hide-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+
+        /* Glassmorphism utility */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        /* Subtle glow for the success check */
+        .success-glow {
+            box-shadow: 0 0 40px rgba(16, 185, 129, 0.2);
+        }
+    </style>
+    <style>
+        body {
+            min-height: max(884px, 100dvh);
+        }
+    </style>
+</head>
+
+<body
+    class="bg-background-light dark:bg-background-dark text-slate-800 dark:text-white font-display antialiased selection:bg-primary selection:text-white h-[100dvh] flex flex-col relative overflow-hidden">
+    <!-- Background Decorative Blobs -->
+    <div class="fixed top-0 left-0 w-full h-full overflow-hidden pointer-events-none z-0">
+        <div class="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] bg-primary/5 rounded-full blur-[100px]"></div>
+        <div class="absolute bottom-[-10%] right-[-10%] w-[60%] h-[60%] bg-primary/5 rounded-full blur-[120px]"></div>
+    </div>
+    <!-- Status Bar Spacer (Simulated for iOS) -->
+    <div class="h-12 w-full z-10 flex items-center justify-between px-6 pt-2">
+        <span class="text-xs font-medium opacity-60">9:41</span>
+        <div class="flex gap-1.5">
+            <span class="material-icons-round text-sm opacity-60">signal_cellular_alt</span>
+            <span class="material-icons-round text-sm opacity-60">wifi</span>
+            <span class="material-icons-round text-sm opacity-60">battery_full</span>
+        </div>
+    </div>
+    <!-- Main Content Container -->
+    <main class="flex-1 flex flex-col px-6 pt-4 pb-48 z-10 relative overflow-y-auto hide-scrollbar">
+        <!-- Success Header Section -->
+        <div class="flex flex-col items-center text-center mb-10 mt-4 animate-fade-in-down">
+            <!-- Animated Checkmark -->
+            <div
+                class="w-24 h-24 rounded-full bg-success/10 flex items-center justify-center mb-6 success-glow border border-success/20">
+                <span id="status-icon" class="material-icons-round text-5xl text-success">check</span>
+            </div>
+            <h1 id="status-title" class="text-3xl font-bold mb-2 tracking-tight">Payment Successful!</h1>
+            <p id="success-message" class="text-white/60 text-base max-w-[280px] leading-relaxed">
+                Connect your channels to start scaling.
+            </p>
+        </div>
+        <!-- Connect Channels Section -->
+        <div class="flex-1 flex flex-col">
+            <div class="flex items-center justify-between mb-5">
+                <h2 data-t="connect-channels" class="text-lg font-semibold tracking-tight">Connect Your Channels</h2>
+                <span
+                    class="text-xs font-medium text-primary bg-primary/10 px-2.5 py-1 rounded-full border border-primary/20">
+                    <span data-t="step-label">Step</span> 2 <span data-t="of-label">of</span> 2
+                </span>
+            </div>
+            <!-- Channels Grid -->
+            <div class="grid grid-cols-2 gap-4 pb-24">
+                <!-- Instagram Card -->
+                <div
+                    class="glass-card rounded-2xl p-4 flex flex-col items-center justify-between h-40 hover:bg-white/5 transition-colors group relative">
+                    <div
+                        class="w-12 h-12 rounded-xl bg-gradient-to-tr from-purple-600 via-pink-600 to-orange-500 flex items-center justify-center mb-3 shadow-lg shadow-pink-500/20">
+                        <svg class="w-7 h-7 text-white" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <path fill-rule="evenodd"
+                                d="M12.315 2c2.43 0 2.784.013 3.808.06 1.064.049 1.791.218 2.427.465a4.902 4.902 0 011.772 1.153 4.902 4.902 0 011.153 1.772c.247.636.416 1.363.465 2.427.048 1.067.06 1.407.06 4.123v.08c0 2.643-.012 2.987-.06 4.043-.049 1.064-.218 1.791-.465 2.427a4.902 4.902 0 01-1.153 1.772 4.902 4.902 0 01-1.772 1.153c-.636.247-1.363.416-2.427.465-1.067.048-1.407.06-4.123.06h-.08c-2.643 0-2.987-.012-4.043-.06-1.064-.049-1.791-.218-2.427-.465a4.902 4.902 0 01-1.772-1.153 4.902 4.902 0 01-1.153-1.772c-.247-.636-.416-1.363-.465-2.427-.047-1.024-.06-1.379-.06-3.808v-.63c0-2.43.013-2.784.06-3.808.049-1.064.218-1.791.465-2.427a4.902 4.902 0 011.153-1.772A4.902 4.902 0 015.468 4.59c.636-.247 1.363-.416 2.427-.465C8.901 2.013 9.256 2 11.685 2h.63zm-.081 1.802h-.468c-2.456 0-2.784.011-3.807.058-.975.045-1.504.207-1.857.344-.467.182-.8.398-1.15.748-.35.35-.566.683-.748 1.15-.137.353-.3.882-.344 1.857-.047 1.023-.058 1.351-.058 3.807v.468c0 2.456.011 2.784.058 3.807.045.975.207 1.504.344 1.857.182.466.399.8.748 1.15.35.35.683.566 1.15.748.353.137.882.3 1.857.344 1.054.048 1.37.058 4.041.058h.08c2.597 0 2.917-.01 3.96-.058.976-.045 1.505-.207 1.858-.344.466-.182.8-.398 1.15-.748.35-.35.566-.683.748-1.15.137-.353.3-.882.344-1.857.048-1.055.058-1.37.058-4.041v-.08c0-2.597-.01-2.917-.058-3.96-.045-.976-.207-1.505-.344-1.858a3.097 3.097 0 00-.748-1.15 3.098 3.098 0 00-1.15-.748c-.353-.137-.882-.3-1.857-.344-1.023-.047-1.351-.058-3.807-.058zM12 6.865a5.135 5.135 0 110 10.27 5.135 5.135 0 010-10.27zm0 1.802a3.333 3.333 0 100 6.666 3.333 3.333 0 000-6.666zm5.338-3.205a1.2 1.2 0 110 2.4 1.2 1.2 0 010-2.4z"
+                                clip-rule="evenodd" />
+                        </svg>
+                    </div>
+                    <div class="text-center mb-3">
+                        <h3 class="font-bold text-sm">Instagram</h3>
+                        <p class="text-[10px] text-white/40 mt-0.5">Business &amp; Creator</p>
+                    </div>
+                    <button id="btn-connect-instagram" data-platform="instagram"
+                        class="btn-connect-platform w-full py-2 bg-primary hover:bg-primary/90 text-white text-xs font-bold rounded-lg transition-all shadow-lg shadow-primary/20 active:scale-95">
+                        Connect
+                    </button>
+                </div>
+                <!-- YouTube Card -->
+                <div
+                    class="glass-card rounded-2xl p-4 flex flex-col items-center justify-between h-40 hover:bg-white/5 transition-colors group relative">
+                    <div
+                        class="w-12 h-12 rounded-xl bg-red-600 flex items-center justify-center mb-3 shadow-lg shadow-red-500/20">
+                        <span class="material-icons-round text-white text-2xl">play_arrow</span>
+                    </div>
+                    <div class="text-center mb-3">
+                        <h3 class="font-bold text-sm">YouTube</h3>
+                        <p class="text-[10px] text-white/40 mt-0.5">Channel Analytics</p>
+                    </div>
+                    <button data-platform="youtube"
+                        class="btn-connect-platform w-full py-2 bg-primary hover:bg-primary/90 text-white text-xs font-bold rounded-lg transition-all shadow-lg shadow-primary/20 active:scale-95">
+                        Connect
+                    </button>
+                </div>
+                <!-- Facebook Card -->
+                <div
+                    class="glass-card rounded-2xl p-4 flex flex-col items-center justify-between h-40 hover:bg-white/5 transition-colors group relative">
+                    <div
+                        class="w-12 h-12 rounded-xl bg-[#1877F2] flex items-center justify-center mb-3 shadow-lg shadow-blue-500/20">
+                        <svg class="w-7 h-7 text-white" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <path fill-rule="evenodd"
+                                d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.988C18.343 21.128 22 16.991 22 12z"
+                                clip-rule="evenodd" />
+                        </svg>
+                    </div>
+                    <div class="text-center mb-3">
+                        <h3 class="font-bold text-sm">Facebook</h3>
+                        <p class="text-[10px] text-white/40 mt-0.5">Pages &amp; Groups</p>
+                    </div>
+                    <button data-platform="facebook"
+                        class="btn-connect-platform w-full py-2 bg-primary hover:bg-primary/90 text-white text-xs font-bold rounded-lg transition-all shadow-lg shadow-primary/20 active:scale-95">
+                        Connect
+                    </button>
+                </div>
+                <!-- LinkedIn Card -->
+                <div
+                    class="glass-card rounded-2xl p-4 flex flex-col items-center justify-between h-40 hover:bg-white/5 transition-colors group relative">
+                    <div
+                        class="w-12 h-12 rounded-xl bg-[#0077b5] flex items-center justify-center mb-3 shadow-lg shadow-blue-400/20">
+                        <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <path fill-rule="evenodd"
+                                d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"
+                                clip-rule="evenodd" />
+                        </svg>
+                    </div>
+                    <div class="text-center mb-3">
+                        <h3 class="font-bold text-sm">LinkedIn</h3>
+                        <p class="text-[10px] text-white/40 mt-0.5">Profile &amp; Company</p>
+                    </div>
+                    <button data-platform="linkedin"
+                        class="btn-connect-platform w-full py-2 bg-primary hover:bg-primary/90 text-white text-xs font-bold rounded-lg transition-all shadow-lg shadow-primary/20 active:scale-95">
+                        Connect
+                    </button>
+                </div>
+                <!-- Google Ads Card -->
+                <div
+                    class="glass-card rounded-2xl p-4 flex flex-col items-center justify-between h-40 hover:bg-white/5 transition-colors group relative">
+                    <div
+                        class="w-12 h-12 rounded-xl bg-white flex items-center justify-center mb-3 shadow-lg shadow-white/10 overflow-hidden relative">
+                        <!-- Abstract representation of Google colors since actual logo is complex -->
+                        <svg class="w-7 h-7 text-primary" viewBox="0 0 48 48" fill="none"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <path
+                                d="M44 24C44 35.0457 35.0457 44 24 44C12.9543 44 4 35.0457 4 24C4 12.9543 12.9543 4 24 4C35.0457 4 44 12.9543 44 24Z"
+                                fill="#1e293b" />
+                            <path d="M38 18L35 34L28 32L29 16L38 18Z" fill="#FBC02D" />
+                            <path d="M29 16L28 32L17 29L19 14L29 16Z" fill="#E65100" />
+                            <path d="M19 14L17 29L12 25L13 12L19 14Z" fill="#43A047" />
+                        </svg>
+                    </div>
+                    <div class="text-center mb-3">
+                        <h3 class="font-bold text-sm">Google Ads</h3>
+                        <p class="text-[10px] text-white/40 mt-0.5">Campaign Manager</p>
+                    </div>
+                    <button data-platform="googleads"
+                        class="btn-connect-platform w-full py-2 bg-primary hover:bg-primary/90 text-white text-xs font-bold rounded-lg transition-all shadow-lg shadow-primary/20 active:scale-95">
+                        Connect
+                    </button>
+                </div>
+                <!-- Shopify Card -->
+                <div
+                    class="glass-card rounded-2xl p-4 flex flex-col items-center justify-between h-40 hover:bg-white/5 transition-colors group relative">
+                    <div
+                        class="w-12 h-12 rounded-xl bg-[#95BF47] flex items-center justify-center mb-3 shadow-lg shadow-green-500/20">
+                        <svg class="w-7 h-7 text-white" viewBox="0 0 24 24" fill="currentColor"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <path
+                                d="M21.7812 7.74962L20.4022 3.66628C20.3204 3.42588 20.129 3.25042 19.8943 3.1979L12.0003 1.44299L4.10547 3.1979C3.87163 3.25032 3.6802 3.42578 3.59838 3.66628L2.21875 7.75056C2.17604 7.87693 2.16431 8.01235 2.18485 8.14364C2.20539 8.27493 2.25746 8.39739 2.33575 8.49852C2.41403 8.59966 2.51578 8.67586 2.63065 8.71937C2.74551 8.76289 2.86944 8.77218 2.98975 8.74628L8.13962 7.63345L11.0267 12.8222L8.71618 16.5171L3.92462 8.95628C3.88289 8.89063 3.82424 8.83789 3.75487 8.8037C3.68549 8.76952 3.60794 8.75514 3.53046 8.76211C3.41825 8.77258 3.31422 8.81971 3.23592 8.89552C3.15762 8.97134 3.10986 9.07123 3.10062 9.17834L4.31649 22.5603H19.6833L20.8992 9.17834C20.8909 9.07095 20.8436 8.97081 20.7657 8.89482C20.6877 8.81882 20.5841 8.77169 20.4721 8.76127C20.394 8.75471 20.3159 8.76953 20.2462 8.80413C20.1765 8.83873 20.1177 8.89182 20.0763 8.95796L15.2844 16.5171L12.9722 12.8222L15.8601 7.63345L21.01 8.74628C21.1302 8.77212 21.2541 8.76282 21.3689 8.71933C21.4837 8.67584 21.5855 8.59969 21.6638 8.4986C21.7422 8.39751 21.7943 8.27508 21.8149 8.1438C21.8355 8.01253 21.8239 7.87711 21.7812 7.75075V7.74962Z" />
+                        </svg>
+                    </div>
+                    <div class="text-center mb-3">
+                        <h3 class="font-bold text-sm">Shopify</h3>
+                        <p class="text-[10px] text-white/40 mt-0.5">Store Sales</p>
+                    </div>
+                    <button data-platform="shopify"
+                        class="btn-connect-platform w-full py-2 bg-primary hover:bg-primary/90 text-white text-xs font-bold rounded-lg transition-all shadow-lg shadow-primary/20 active:scale-95">
+                        Connect
+                    </button>
+                </div>
+            </div>
+        </div>
+    </main>
+    <!-- Fixed Bottom Actions -->
+    <div
+        class="fixed bottom-0 left-0 w-full p-6 bg-gradient-to-t from-background-dark via-background-dark/95 to-transparent z-20">
+        <div class="flex flex-col gap-4">
+            <button id="btn-continue"
+                class="w-full py-4 bg-white/10 border border-white/10 text-white/40 font-bold rounded-xl transition-all cursor-not-allowed flex items-center justify-center gap-2">
+                <span data-t="continue-dash">Continue to Dashboard</span>
+                <span class="material-icons-round text-sm">arrow_forward</span>
+            </button>
+            <button data-t="skip-later" onclick="window.location.href='../3._brand-pe_main_dashboard/code.html'"
+                class="text-xs text-white/40 font-medium hover:text-white/60 transition-colors text-center pb-2">
+                I'll do this later
+            </button>
+        </div>
+        <!-- Safe area indicator -->
+        <div class="h-1 w-1/3 bg-white/20 rounded-full mx-auto mt-4"></div>
+    </div>
+    <script>
+        // Theme Logic
+        const html = document.documentElement;
+        const savedTheme = localStorage.getItem('theme');
+        if (savedTheme === 'dark' || (!savedTheme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            html.classList.add('dark');
+        } else {
+            html.classList.remove('dark');
+        }
+
+        // Get Plan Name from URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const plan = urlParams.get('plan');
+        const statusTitle = document.getElementById('status-title');
+        const statusIcon = document.getElementById('status-icon');
+        const successMessage = document.getElementById('success-message');
+
+        if (plan) {
+            localStorage.setItem('userPlan', plan);
+            const isFree = plan.toLowerCase().includes('free');
+
+            if (isFree) {
+                statusTitle.innerText = "Welcome to Brand-pe!";
+                statusIcon.innerText = "celebration";
+                successMessage.innerHTML = `You've started your <span class="text-primary font-bold">Free Forever</span> plan. Connect your channels to grow!`;
+            } else {
+                statusTitle.innerText = "Trial Started!";
+                statusIcon.innerText = "check";
+                successMessage.innerHTML = `Your 14-day <span class="text-primary font-bold">${plan}</span> trial is now active. No charges until the trial ends.`;
+            }
+        }
+
+
+
+        // Initialize pricing based on default or saved state (if any)
+        // (No pricing logic needed here, but we can initialize language)
+
+        // --- Translation Engine ---
+        const translations = {
+            'en': {
+                'connect-channels': 'Connect Your Channels',
+                'step-label': 'Step',
+                'of-label': 'of',
+                'continue-dash': 'Continue to Dashboard',
+                'skip-later': 'I\'ll do this later',
+                'welcome-title': 'Welcome to Brand-pe!',
+                'payment-success': 'Payment Successful!',
+                'trial-active': 'Trial Started!',
+                'free-msg': 'You\'ve started your <span class="text-primary font-bold">Free Forever</span> plan. Connect your channels to grow!',
+                'trial-msg': 'Your 14-day <span class="text-primary font-bold">{plan}</span> trial is now active. No charges until the trial ends.',
+                'connect': 'Connect',
+                'connected': 'Connected'
+            },
+            'hi': {
+                'connect-channels': 'अपने चैनल जोड़ें',
+                'step-label': 'कदम',
+                'of-label': 'का',
+                'continue-dash': 'डैशबोर्ड पर आगे बढ़ें',
+                'skip-later': 'मैं इसे बाद में करूँगा',
+                'welcome-title': 'Brand-pe में आपका स्वागत है!',
+                'payment-success': 'भुगतान सफल!',
+                'trial-active': 'ट्रायल शुरू हो गया है!',
+                'free-msg': 'आपने अपनी <span class="text-primary font-bold">हमेशा के लिए फ्री</span> योजना शुरू कर दी है। आगे बढ़ने के लिए अपने चैनल जोड़ें!',
+                'trial-msg': 'आपका 14-दिनीय <span class="text-primary font-bold">{plan}</span> ट्रायल अब सक्रिय है। ट्रायल समाप्त होने तक कोई शुल्क नहीं लिया जाएगा।',
+                'connect': 'जोड़ें',
+                'connected': 'जुड़ा हुआ'
+            }
+        };
+
+        function applyTranslations() {
+            const lang = localStorage.getItem('lang') || 'en';
+            document.querySelectorAll('[data-t]').forEach(el => {
+                const key = el.getAttribute('data-t');
+                if (translations[lang] && translations[lang][key]) {
+                    el.innerHTML = translations[lang][key];
+                }
+            });
+
+            // Specific dynamic updates
+            const urlParams = new URLSearchParams(window.location.search);
+            const plan = urlParams.get('plan') || 'Pro';
+            const isFree = plan.toLowerCase().includes('free');
+
+            if (isFree) {
+                document.getElementById('status-title').innerHTML = translations[lang]['welcome-title'];
+                document.getElementById('status-icon').innerText = "celebration";
+                document.getElementById('success-message').innerHTML = translations[lang]['free-msg'];
+            } else {
+                document.getElementById('status-title').innerHTML = translations[lang]['trial-active'];
+                document.getElementById('status-icon').innerText = "check";
+                document.getElementById('success-message').innerHTML = translations[lang]['trial-msg'].replace('{plan}', plan);
+            }
+
+            // Update connect buttons
+            document.querySelectorAll('button').forEach(btn => {
+                if (btn.innerText.trim() === 'Connect' || btn.innerText.trim() === 'जोड़ें') {
+                    btn.innerText = translations[lang]['connect'];
+                }
+            });
+        }
+
+        applyTranslations();
+
+        // Connect Button Logic
+        const connectButtons = document.querySelectorAll('.btn-connect-platform');
+        const btnContinue = document.getElementById('btn-continue');
+
+        // Load initial state
+        const connectedPlatforms = JSON.parse(localStorage.getItem('connectedPlatforms') || '{}');
+
+        function updateContinueButton() {
+            if (connectedPlatforms['instagram']) {
+                btnContinue.classList.remove('bg-white/10', 'text-white/40', 'cursor-not-allowed');
+                btnContinue.classList.add('bg-primary', 'hover:bg-orange-600', 'text-white', 'shadow-lg', 'shadow-primary/30', 'cursor-pointer', 'active:scale-[0.98]');
+            } else {
+                btnContinue.classList.add('bg-white/10', 'text-white/40', 'cursor-not-allowed');
+                btnContinue.classList.remove('bg-primary', 'hover:bg-orange-600', 'text-white', 'shadow-lg', 'shadow-primary/30', 'cursor-pointer', 'active:scale-[0.98]');
+            }
+        }
+
+        connectButtons.forEach(btn => {
+            const platform = btn.getAttribute('data-platform');
+            const lang = localStorage.getItem('lang') || 'en';
+            const connectedText = translations[lang]['connected'];
+
+            // Initialize UI if already connected
+            if (connectedPlatforms[platform]) {
+                btn.innerHTML = `<span class="material-icons-round text-sm">check</span> ${connectedText}`;
+                btn.classList.remove('bg-primary', 'hover:bg-primary/90', 'text-white', 'shadow-lg');
+                btn.classList.add('bg-success/10', 'text-success', 'border', 'border-success/20', 'cursor-default');
+                const card = btn.closest('.glass-card');
+                if (card) {
+                    card.classList.add('border-success/30', 'bg-white/5');
+                    const badge = document.createElement('div');
+                    badge.className = 'absolute top-2 right-2 w-2 h-2 rounded-full bg-success shadow-[0_0_8px_rgba(16,185,129,0.5)]';
+                    card.appendChild(badge);
+                }
+            }
+
+            btn.addEventListener('click', function () {
+                if (!connectedPlatforms[platform]) {
+                    connectedPlatforms[platform] = true;
+                    localStorage.setItem('connectedPlatforms', JSON.stringify(connectedPlatforms));
+
+                    this.innerHTML = `<span class="material-icons-round text-sm">check</span> ${connectedText}`;
+                    this.classList.remove('bg-primary', 'hover:bg-primary/90', 'text-white', 'shadow-lg');
+                    this.classList.add('bg-success/10', 'text-success', 'border', 'border-success/20', 'cursor-default');
+
+                    const card = this.closest('.glass-card');
+                    if (card) {
+                        card.classList.add('border-success/30', 'bg-white/5');
+                        const badge = document.createElement('div');
+                        badge.className = 'absolute top-2 right-2 w-2 h-2 rounded-full bg-success shadow-[0_0_8px_rgba(16,185,129,0.5)]';
+                        card.appendChild(badge);
+                    }
+
+                    updateContinueButton();
+                }
+            });
+        });
+
+        updateContinueButton();
+
+        // Handle Continue Button Click
+        btnContinue.addEventListener('click', function () {
+            if (connectedPlatforms['instagram']) {
+                window.location.href = '../3._brand-pe_main_dashboard/code.html';
+            } else {
+                const lang = localStorage.getItem('lang') || 'en';
+                const alertMsg = lang === 'hi' ? 'कृपया आगे बढ़ने के लिए अपना इंस्टाग्राम अकाउंट जोड़ें।' : 'Please connect your Instagram account to proceed.';
+                alert(alertMsg);
+                const igCard = document.getElementById('btn-connect-instagram').closest('.glass-card');
+                igCard.classList.add('ring-2', 'ring-primary', 'animate-pulse');
+                setTimeout(() => igCard.classList.remove('ring-2', 'ring-primary', 'animate-pulse'), 2000);
+            }
+        });
+    </script>
+</body>
+
+</html>

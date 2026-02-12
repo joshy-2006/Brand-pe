@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Ads &amp; Shopify Analytics - Brand-pe</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&amp;display=swap"
+        rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: 'false',
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#ec7f13",
+                        "background-light": "#f8f7f6",
+                        "background-dark": "#221910",
+                        "card-dark": "#2e241b", // Derived from #221910 - slightly lighter for cards
+                        "card-highlight": "#3d3025", // Even lighter for hover/active states
+                    },
+                    fontFamily: {
+                        "display": ["Manrope", "sans-serif"]
+                    },
+                    borderRadius: { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "2xl": "1rem", "full": "9999px" },
+                },
+            },
+        }
+    </script>
+    <style>
+        /* Custom scrollbar for horizontal scroll areas */
+        .hide-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+
+        .hide-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+    <style>
+        /* Multi-option Slider Style */
+        .tab-toggle {
+            position: relative;
+            display: flex;
+            background: rgba(0, 0, 0, 0.05);
+            padding: 4px;
+            border-radius: 12px;
+            width: 100%;
+        }
+
+        .dark .tab-toggle {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .tab-slider {
+            position: absolute;
+            top: 4px;
+            bottom: 4px;
+            width: calc(25% - 4px);
+            /* 4 tabs */
+            background: #ec7f13;
+            border-radius: 8px;
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 4px 12px rgba(236, 127, 19, 0.2);
+            z-index: 0;
+        }
+
+        .tab-btn {
+            flex: 1;
+            z-index: 1;
+            padding: 8px 0;
+            font-size: 12px;
+            font-weight: 700;
+            transition: color 0.3s;
+            text-align: center;
+        }
+
+        /* Hide scrollbar */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+    <style>
+        body {
+            min-height: max(884px, 100dvh);
+        }
+    </style>
+    <style>
+    </style>
+</head>
+
+<body
+    class="bg-background-light dark:bg-background-dark font-display text-slate-800 dark:text-slate-100 antialiased selection:bg-primary/30">
+    <div
+        class="max-w-md mx-auto h-[100dvh] relative flex flex-col overflow-hidden shadow-2xl bg-background-light dark:bg-background-dark">
+        <!-- Header -->
+        <header
+            class="pt-12 pb-4 px-6 flex items-center justify-between z-50 bg-background-light/90 dark:bg-background-dark/90 backdrop-blur-md border-b border-black/5 dark:border-white/5">
+            <div>
+                <h1 data-t="performance" class="text-xl font-bold tracking-tight">Performance</h1>
+                <p data-t="brand-analytics" class="text-xs font-medium text-slate-500 dark:text-slate-400">Brand-pe
+                    Analytics</p>
+            </div>
+            <div class="flex items-center gap-3">
+                <button
+                    class="flex items-center gap-2 bg-slate-200 dark:bg-card-dark px-3 py-1.5 rounded-full border border-slate-300 dark:border-white/5 text-xs font-semibold">
+                    <span>All Time</span>
+                    <span class="material-icons-round text-sm">expand_more</span>
+                </button>
+                <div
+                    class="relative w-8 h-8 rounded-full bg-slate-200 dark:bg-card-dark flex items-center justify-center border border-slate-300 dark:border-white/5">
+                    <span class="material-icons-outlined text-sm">notifications</span>
+                    <span
+                        class="absolute top-0 right-0 w-2.5 h-2.5 bg-red-500 rounded-full border-2 border-background-light dark:border-background-dark"></span>
+                </div>
+            </div>
+        </header>
+        <!-- Main Content -->
+        <main class="flex-1 px-5 pt-6 space-y-6 overflow-y-auto no-scrollbar">
+            <!-- Integration Status -->
+            <div class="flex items-center gap-2 px-1">
+                <span class="relative flex h-2 w-2">
+                    <span
+                        class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+                    <span class="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
+                </span>
+                <span class="text-xs font-medium text-slate-500 dark:text-slate-400">Live Sync: Shopify, Meta Ads,
+                    Google Ads</span>
+            </div>
+            <!-- Hero Metrics Grid -->
+            <div class="grid grid-cols-2 gap-4">
+                <!-- Total Revenue Card -->
+                <div
+                    class="bg-white dark:bg-card-dark p-5 rounded-2xl shadow-sm border border-slate-100 dark:border-white/5 relative overflow-hidden group">
+                    <div
+                        class="absolute top-0 right-0 w-24 h-24 bg-primary/10 rounded-full -mr-10 -mt-10 blur-xl group-hover:bg-primary/20 transition-all">
+                    </div>
+                    <div class="flex items-center gap-2 mb-3">
+                        <div class="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center text-primary">
+                            <span class="material-icons-round text-lg">payments</span>
+                        </div>
+                        <span data-t="revenue"
+                            class="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Revenue</span>
+                    </div>
+                    <h2 class="text-2xl font-extrabold text-slate-900 dark:text-white mb-1">₹12.45L</h2>
+                    <div class="flex items-center gap-1.5">
+                        <div
+                            class="flex items-center text-emerald-500 text-xs font-bold bg-emerald-500/10 px-1.5 py-0.5 rounded">
+                            <span class="material-icons-round text-[10px]">trending_up</span>
+                            <span>15%</span>
+                        </div>
+                        <span class="text-[10px] text-slate-400">vs last mo.</span>
+                    </div>
+                </div>
+                <!-- Conversion Rate Card -->
+                <div
+                    class="bg-white dark:bg-card-dark p-5 rounded-2xl shadow-sm border border-slate-100 dark:border-white/5 relative overflow-hidden group">
+                    <div
+                        class="absolute bottom-0 left-0 w-20 h-20 bg-emerald-500/10 rounded-full -ml-8 -mb-8 blur-xl group-hover:bg-emerald-500/20 transition-all">
+                    </div>
+                    <div class="flex items-center gap-2 mb-3">
+                        <div
+                            class="w-8 h-8 rounded-lg bg-emerald-500/10 flex items-center justify-center text-emerald-500">
+                            <span class="material-icons-round text-lg">ads_click</span>
+                        </div>
+                        <span data-t="conv-rate"
+                            class="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Conv.
+                            Rate</span>
+                    </div>
+                    <h2 class="text-2xl font-extrabold text-slate-900 dark:text-white mb-1">2.4%</h2>
+                    <div class="flex items-center gap-1.5">
+                        <div
+                            class="flex items-center text-emerald-500 text-xs font-bold bg-emerald-500/10 px-1.5 py-0.5 rounded">
+                            <span class="material-icons-round text-[10px]">arrow_upward</span>
+                            <span>0.3%</span>
+                        </div>
+                        <span class="text-[10px] text-slate-400">vs last mo.</span>
+                    </div>
+                </div>
+            </div>
+            <!-- Platform Toggle (Consistent Sliding Style) -->
+            <div class="tab-toggle mb-4">
+                <div id="tab-slider" class="tab-slider"></div>
+                <button data-t="tab-all" onclick="setTab(0)" class="tab-btn text-white">All</button>
+                <button data-t="tab-shopify" onclick="setTab(1)" class="tab-btn text-slate-500">Shopify</button>
+                <button data-t="tab-meta" onclick="setTab(2)" class="tab-btn text-slate-500">Meta</button>
+                <button data-t="tab-google" onclick="setTab(3)" class="tab-btn text-slate-500">Google</button>
+            </div>
+            <!-- Detailed Stats Grid -->
+            <div class="space-y-4">
+                <!-- Chart Section: ROAS & Spend -->
+                <div class="bg-white dark:bg-card-dark rounded-2xl p-5 border border-slate-100 dark:border-white/5">
+                    <div class="flex justify-between items-center mb-6">
+                        <div>
+                            <h3 class="font-bold text-base text-slate-800 dark:text-white">Ad Performance</h3>
+                            <p class="text-xs text-slate-500">Spend vs. ROAS Trend</p>
+                        </div>
+                        <div class="text-right">
+                            <div class="text-xs font-medium text-slate-400 uppercase">Current ROAS</div>
+                            <div class="text-lg font-bold text-primary">4.02x</div>
+                        </div>
+                    </div>
+                    <!-- Visualization Placeholder: Sparkline -->
+                    <div class="relative h-32 w-full flex items-end justify-between gap-1">
+                        <!-- Simplified Bar/Line Representation for Design -->
+                        <div class="w-1/12 bg-primary/20 rounded-t-sm h-[40%]"></div>
+                        <div class="w-1/12 bg-primary/30 rounded-t-sm h-[55%]"></div>
+                        <div class="w-1/12 bg-primary/20 rounded-t-sm h-[45%]"></div>
+                        <div class="w-1/12 bg-primary/40 rounded-t-sm h-[60%]"></div>
+                        <div class="w-1/12 bg-primary/30 rounded-t-sm h-[50%]"></div>
+                        <div class="w-1/12 bg-primary/50 rounded-t-sm h-[70%]"></div>
+                        <div class="w-1/12 bg-primary/40 rounded-t-sm h-[65%]"></div>
+                        <div class="w-1/12 bg-primary/60 rounded-t-sm h-[80%]"></div>
+                        <div class="w-1/12 bg-primary/50 rounded-t-sm h-[75%]"></div>
+                        <div class="w-1/12 bg-primary/80 rounded-t-sm h-[90%]"></div>
+                        <div class="w-1/12 bg-primary/60 rounded-t-sm h-[85%]"></div>
+                        <div class="w-1/12 bg-primary rounded-t-sm h-full relative group">
+                            <!-- Tooltip for active state -->
+                            <div
+                                class="absolute -top-10 left-1/2 -translate-x-1/2 bg-slate-800 text-white text-[10px] px-2 py-1 rounded shadow-lg whitespace-nowrap opacity-100">
+                                ROAS 4.2x
+                            </div>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-2 gap-4 mt-6 pt-6 border-t border-slate-100 dark:border-white/10">
+                        <div>
+                            <div class="text-xs text-slate-500 mb-1">Total Ad Spend</div>
+                            <div class="font-bold text-slate-800 dark:text-white">₹3,10,000</div>
+                        </div>
+                        <div>
+                            <div class="text-xs text-slate-500 mb-1">Avg. CPC</div>
+                            <div class="font-bold text-slate-800 dark:text-white">₹12.50</div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Traffic Source Breakdown -->
+                <div class="bg-white dark:bg-card-dark rounded-2xl p-5 border border-slate-100 dark:border-white/5">
+                    <h3 class="font-bold text-base text-slate-800 dark:text-white mb-4">Traffic Sources</h3>
+                    <div class="flex items-center gap-6">
+                        <!-- Donut Chart Placeholder -->
+                        <div class="relative w-28 h-28 flex-shrink-0">
+                            <!-- Using CSS Conic Gradient for Donut Chart -->
+                            <div class="w-full h-full rounded-full"
+                                style="background: conic-gradient(#ec7f13 0% 45%, #f97316 45% 70%, #1e293b 70% 100%);">
+                            </div>
+                            <div
+                                class="absolute inset-0 m-auto w-16 h-16 bg-white dark:bg-card-dark rounded-full flex items-center justify-center">
+                                <span class="text-[10px] font-bold text-slate-400">Total<br />Visits</span>
+                            </div>
+                        </div>
+                        <!-- Legend -->
+                        <div class="flex-1 space-y-3">
+                            <div class="flex justify-between items-center text-sm">
+                                <div class="flex items-center gap-2">
+                                    <span class="w-2.5 h-2.5 rounded-full bg-primary"></span>
+                                    <span class="text-slate-600 dark:text-slate-300">Paid Ads</span>
+                                </div>
+                                <span class="font-bold text-slate-900 dark:text-white">45%</span>
+                            </div>
+                            <div class="flex justify-between items-center text-sm">
+                                <div class="flex items-center gap-2">
+                                    <span class="w-2.5 h-2.5 rounded-full bg-orange-500"></span>
+                                    <span class="text-slate-600 dark:text-slate-300">Social</span>
+                                </div>
+                                <span class="font-bold text-slate-900 dark:text-white">25%</span>
+                            </div>
+                            <div class="flex justify-between items-center text-sm">
+                                <div class="flex items-center gap-2">
+                                    <span class="w-2.5 h-2.5 rounded-full bg-slate-700"></span>
+                                    <span class="text-slate-600 dark:text-slate-300">Direct/SEO</span>
+                                </div>
+                                <span class="font-bold text-slate-900 dark:text-white">30%</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Recent Shopify Orders -->
+                <div
+                    class="bg-white dark:bg-card-dark rounded-2xl border border-slate-100 dark:border-white/5 overflow-hidden">
+                    <div class="p-5 border-b border-slate-100 dark:border-white/5 flex justify-between items-center">
+                        <div>
+                            <h3 class="font-bold text-base text-slate-800 dark:text-white">Recent Orders</h3>
+                            <p class="text-xs text-slate-500">Shopify Real-time</p>
+                        </div>
+                        <div class="text-right">
+                            <span
+                                class="text-xs bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded text-slate-500 font-medium">AOV:
+                                ₹3,021</span>
+                        </div>
+                    </div>
+                    <div class="divide-y divide-slate-100 dark:divide-slate-800">
+                        <!-- Order Item 1 -->
+                        <div
+                            class="p-4 flex items-center justify-between hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+                            <div class="flex items-center gap-3">
+                                <div
+                                    class="w-10 h-10 rounded-full bg-green-100 dark:bg-green-500/10 flex items-center justify-center text-green-600 dark:text-green-400">
+                                    <span class="material-icons-outlined text-lg">shopping_bag</span>
+                                </div>
+                                <div>
+                                    <div class="text-sm font-bold text-slate-800 dark:text-slate-200">Order #1024</div>
+                                    <div class="text-[10px] text-slate-400">2 items • Just now</div>
+                                </div>
+                            </div>
+                            <div class="text-right">
+                                <div class="text-sm font-bold text-slate-800 dark:text-white">₹4,250</div>
+                                <div class="text-[10px] text-green-500 font-medium">Paid</div>
+                            </div>
+                        </div>
+                        <!-- Order Item 2 -->
+                        <div
+                            class="p-4 flex items-center justify-between hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+                            <div class="flex items-center gap-3">
+                                <div
+                                    class="w-10 h-10 rounded-full bg-blue-100 dark:bg-blue-500/10 flex items-center justify-center text-blue-600 dark:text-blue-400">
+                                    <span class="material-icons-outlined text-lg">shopping_bag</span>
+                                </div>
+                                <div>
+                                    <div class="text-sm font-bold text-slate-800 dark:text-slate-200">Order #1023</div>
+                                    <div class="text-[10px] text-slate-400">1 item • 14m ago</div>
+                                </div>
+                            </div>
+                            <div class="text-right">
+                                <div class="text-sm font-bold text-slate-800 dark:text-white">₹1,299</div>
+                                <div class="text-[10px] text-green-500 font-medium">Paid</div>
+                            </div>
+                        </div>
+                        <!-- Order Item 3 -->
+                        <div
+                            class="p-4 flex items-center justify-between hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+                            <div class="flex items-center gap-3">
+                                <div
+                                    class="w-10 h-10 rounded-full bg-purple-100 dark:bg-purple-500/10 flex items-center justify-center text-purple-600 dark:text-purple-400">
+                                    <span class="material-icons-outlined text-lg">shopping_bag</span>
+                                </div>
+                                <div>
+                                    <div class="text-sm font-bold text-slate-800 dark:text-slate-200">Order #1022</div>
+                                    <div class="text-[10px] text-slate-400">3 items • 1h ago</div>
+                                </div>
+                            </div>
+                            <div class="text-right">
+                                <div class="text-sm font-bold text-slate-800 dark:text-white">₹8,400</div>
+                                <div class="text-[10px] text-green-500 font-medium">Paid</div>
+                            </div>
+                        </div>
+                    </div>
+                    <button
+                        class="w-full py-3 text-xs font-semibold text-primary text-center hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors">
+                        View All 412 Orders
+                    </button>
+                </div>
+            </div>
+            <div class="h-8"></div> <!-- Bottom Spacer -->
+        </main>
+        <!-- Bottom Navigation Bar (iOS Style) -->
+        <nav
+            class="bg-white/90 dark:bg-card-dark/90 backdrop-blur-lg border-t border-slate-200 dark:border-white/5 pb-6 pt-3 px-6 z-50 relative w-full">
+            <div class="flex justify-between items-center max-w-md mx-auto">
+                <a class="flex flex-col items-center gap-1 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 transition-colors group"
+                    href="../3._brand-pe_main_dashboard/code.html">
+                    <span class="material-icons-round text-2xl group-hover:scale-110 transition-transform">home</span>
+                    <span data-t="nav-home" class="text-[10px] font-medium">Home</span>
+                </a>
+                <a class="flex flex-col items-center gap-1 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 transition-colors group"
+                    href="../4._ai_post_studio_&_scheduler/code.html">
+                    <span
+                        class="material-icons-round text-2xl group-hover:scale-110 transition-transform">calendar_today</span>
+                    <span data-t="nav-schedule" class="text-[10px] font-medium">Schedule</span>
+                </a>
+                <div class="relative -top-6">
+                    <button onclick="window.location.href='../4._ai_post_studio_&_scheduler/code.html'"
+                        class="w-14 h-14 bg-primary text-white rounded-2xl flex items-center justify-center shadow-lg shadow-primary/40 active:scale-95 transition-transform">
+                        <span class="material-icons-round text-2xl">add</span>
+                    </button>
+                </div>
+                <a class="flex flex-col items-center gap-1 text-primary group" href="#">
+                    <span
+                        class="material-icons-round text-2xl group-hover:scale-110 transition-transform">insights</span>
+                    <span data-t="nav-analytics" class="text-[10px] font-medium">Analytics</span>
+                </a>
+                <a class="flex flex-col items-center gap-1 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 transition-colors group"
+                    href="../8._settings_&_preferences/code.html">
+                    <span class="material-icons-round text-2xl group-hover:scale-110 transition-transform">person</span>
+                    <span data-t="nav-profile" class="text-[10px] font-medium">Profile</span>
+                </a>
+            </div>
+        </nav>
+    </div>
+    <script>
+        // Theme Logic
+        const html = document.documentElement;
+        const savedTheme = localStorage.getItem('theme');
+        if (savedTheme === 'dark' || (!savedTheme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            html.classList.add('dark');
+        } else {
+            html.classList.remove('dark');
+        }
+
+        // Tab Logic
+        function setTab(index) {
+            const slider = document.getElementById('tab-slider');
+            const buttons = document.querySelectorAll('.tab-btn');
+
+            // Move slider
+            slider.style.transform = `translateX(${index * 100}%)`;
+
+            // Update colors
+            buttons.forEach((btn, i) => {
+                if (i === index) {
+                    btn.classList.add('text-white');
+                    btn.classList.remove('text-slate-500');
+                } else {
+                    btn.classList.remove('text-white');
+                    btn.classList.add('text-slate-500');
+                }
+            });
+        }
+
+        // Initialize the first tab as active on load
+        setTab(0);
+
+        // --- Translation Engine ---
+        const translations = {
+            'en': {
+                'performance': 'Performance',
+                'brand-analytics': 'Brand-pe Analytics',
+                'tab-all': 'All',
+                'tab-shopify': 'Shopify',
+                'tab-meta': 'Meta',
+                'tab-google': 'Google',
+                'revenue': 'Revenue',
+                'conv-rate': 'Conv. Rate',
+                'ad-performance': 'Ad Performance',
+                'traffic-sources': 'Traffic Sources',
+                'revenue': 'Revenue',
+                'conv-rate': 'Conv. Rate',
+                'ad-performance': 'Ad Performance',
+                'traffic-sources': 'Traffic Sources',
+                'recent-orders': 'Recent Orders',
+                'nav-home': 'Home',
+                'nav-schedule': 'Schedule',
+                'nav-analytics': 'Analytics',
+                'nav-profile': 'Profile'
+            },
+            'hi': {
+                'performance': 'प्रदर्शन',
+                'brand-analytics': 'Brand-pe एनालिटिक्स',
+                'tab-all': 'सब',
+                'tab-shopify': 'Shopify',
+                'tab-meta': 'मेटा',
+                'tab-google': 'गूगल',
+                'revenue': 'राजस्व',
+                'conv-rate': 'कन्वर्जन दर',
+                'ad-performance': 'विज्ञापन प्रदर्शन',
+                'traffic-sources': 'ट्रैफिक स्रोत',
+                'recent-orders': 'हाल के ऑर्डर',
+                'nav-home': 'होम',
+                'nav-schedule': 'शेड्यूल',
+                'nav-analytics': 'एनालिटिक्स',
+                'nav-profile': 'प्रोफ़ाइल'
+            }
+        };
+
+        function applyTranslations() {
+            const lang = localStorage.getItem('lang') || 'en';
+            document.querySelectorAll('[data-t]').forEach(el => {
+                const key = el.getAttribute('data-t');
+                if (translations[lang] && translations[lang][key]) {
+                    el.innerHTML = translations[lang][key];
+                }
+            });
+        }
+
+        applyTranslations();
+    </script>
+</body>
+
+</html>
